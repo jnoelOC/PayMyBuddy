@@ -25,10 +25,8 @@ public class UserAccountService implements IUserAccountService {
 
 	@Transactional
 	public UserAccount saveUserAccount(UserAccount userAccount) {
-		// if (!userAccount.getLoginMailPK().isEmpty()) {
+
 		return userAccountRepository.save(userAccount);
-		// }
-		// return null;
 	}
 
 	@Transactional

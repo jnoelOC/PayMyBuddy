@@ -12,7 +12,7 @@ public class BankAccount {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_BA_PK")
-	private String idPK;
+	private Long idPK;
 	@Column(name = "IBAN")
 	private String iban;
 	@Column(name = "BIC")
@@ -25,7 +25,7 @@ public class BankAccount {
 	public BankAccount() {
 	}
 
-	public BankAccount(String idPK, String iban, String bic, String bankName, String loginMailFK) {
+	public BankAccount(Long idPK, String iban, String bic, String bankName, String loginMailFK) {
 		super();
 		this.idPK = idPK;
 		this.iban = iban;
@@ -34,11 +34,11 @@ public class BankAccount {
 		this.loginMailFK = loginMailFK;
 	}
 
-	public String getIdPK() {
+	public Long getIdPK() {
 		return idPK;
 	}
 
-	public void setIdPK(String idPK) {
+	public void setIdPK(Long idPK) {
 		this.idPK = idPK;
 	}
 

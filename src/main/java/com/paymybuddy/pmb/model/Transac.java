@@ -12,7 +12,7 @@ public class Transac {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_TRANSACTION")
-	private Integer idTransaction;
+	private Long idTransaction;
 	@Column(name = "DESCRIPTION")
 	private String description;
 	@Column(name = "AMOUNT")
@@ -25,7 +25,7 @@ public class Transac {
 	public Transac() {
 	}
 
-	public Transac(Integer idTransaction, String description, Integer amount, String giverFK, String receiverFK) {
+	public Transac(Long idTransaction, String description, Integer amount, String giverFK, String receiverFK) {
 		this.idTransaction = idTransaction;
 		this.description = description;
 		this.amount = amount;
@@ -33,11 +33,11 @@ public class Transac {
 		this.receiverFK = receiverFK;
 	}
 
-	public Integer getIdTransaction() {
+	public Long getIdTransaction() {
 		return idTransaction;
 	}
 
-	public void setIdTransaction(Integer idTransaction) {
+	public void setIdTransaction(Long idTransaction) {
 		this.idTransaction = idTransaction;
 	}
 

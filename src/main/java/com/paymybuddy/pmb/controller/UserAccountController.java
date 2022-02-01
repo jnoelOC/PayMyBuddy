@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paymybuddy.pmb.model.UserAccount;
-import com.paymybuddy.pmb.service.IUserAccountService;
+import com.paymybuddy.pmb.service.UserAccountService;
 
 @RestController
 public class UserAccountController {
@@ -23,7 +23,7 @@ public class UserAccountController {
 	public static final Logger logger = LogManager.getLogger(UserAccountController.class);
 
 	@Autowired
-	IUserAccountService userAccountService;
+	UserAccountService userAccountService;
 
 	@GetMapping("/useraccounts")
 	public List<UserAccount> findAllUserAccounts() {

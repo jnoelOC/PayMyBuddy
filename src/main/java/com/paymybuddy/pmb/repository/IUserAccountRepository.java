@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.paymybuddy.pmb.model.UserAccount;
 
 @Repository
-public interface IUserAccountRepository extends JpaRepository<UserAccount, String> {
+public interface IUserAccountRepository extends JpaRepository<UserAccount, Long> {
 
 	// pour des requetes perso
 	// @Query

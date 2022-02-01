@@ -12,7 +12,7 @@ public class Connection {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_CNX_PK")
-	private String idCnxPK;
+	private Long idCnxPK;
 	@Column(name = "RECEIVER")
 	private String receiver;
 	@Column(name = "GIVER")
@@ -21,7 +21,7 @@ public class Connection {
 	@Column(name = "LOGIN_MAIL_FK")
 	private String loginMailFK;
 
-	public Connection(String idCnxPK, String receiver, String giver, String loginMailFK) {
+	public Connection(Long idCnxPK, String receiver, String giver, String loginMailFK) {
 		this.idCnxPK = idCnxPK;
 		this.receiver = receiver;
 		this.giver = giver;
@@ -31,11 +31,11 @@ public class Connection {
 	public Connection() {
 	}
 
-	public String getIdCnxPK() {
+	public Long getIdCnxPK() {
 		return idCnxPK;
 	}
 
-	public void setIdCnxPK(String idCnxPK) {
+	public void setIdCnxPK(Long idCnxPK) {
 		this.idCnxPK = idCnxPK;
 	}
 
