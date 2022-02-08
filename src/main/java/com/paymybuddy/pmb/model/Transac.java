@@ -2,35 +2,54 @@ package com.paymybuddy.pmb.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "transac")
 public class Transac {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_TRANSACTION")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID_TRANSACTION", nullable = false, unique = true)
 	private Long idTransaction;
-	@Column(name = "DESCRIPTION")
+	@Column(name = "DESCRIPTION", length = 60)
 	private String description;
 	@Column(name = "AMOUNT")
 	private Integer amount;
-	@Column(name = "GIVER_FK")
-	private String giverFK;
-	@Column(name = "RECEIVER_FK")
-	private String receiverFK;
+	@Column(name = "GIVER", length = 50)
+	private String giver;
+	@Column(name = "RECEIVER", length = 50)
+	private String receiver;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "ID_UA_FK", updatable = false, insertable = false)
+	private UserAccount userAccount;
 
 	public Transac() {
 	}
 
-	public Transac(Long idTransaction, String description, Integer amount, String giverFK, String receiverFK) {
+	public Transac(Long idTransaction, String description, Integer amount, String giver, String receiver,
+			UserAccount userAccount) {
 		this.idTransaction = idTransaction;
 		this.description = description;
 		this.amount = amount;
-		this.giverFK = giverFK;
-		this.receiverFK = receiverFK;
+		this.giver = giver;
+		this.receiver = receiver;
+		this.userAccount = userAccount;
+	}
+
+	public UserAccount getUserAccount() {
+		return userAccount;
+	}
+
+	public void setUserAccount(UserAccount userAccount) {
+		this.userAccount = userAccount;
 	}
 
 	public Long getIdTransaction() {
@@ -57,20 +76,20 @@ public class Transac {
 		this.amount = amount;
 	}
 
-	public String getGiverFK() {
-		return giverFK;
+	public String getGiver() {
+		return giver;
 	}
 
-	public void setGiverFK(String giverFK) {
-		this.giverFK = giverFK;
+	public void setGiver(String giver) {
+		this.giver = giver;
 	}
 
-	public String getReceiverFK() {
-		return receiverFK;
+	public String getReceiver() {
+		return receiver;
 	}
 
-	public void setReceiverFK(String receiverFK) {
-		this.receiverFK = receiverFK;
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
 	}
 
 }

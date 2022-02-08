@@ -10,7 +10,7 @@ import javax.persistence.Id;
 public class BankAccount {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID_BA_PK")
 	private Long idPK;
 	@Column(name = "IBAN")

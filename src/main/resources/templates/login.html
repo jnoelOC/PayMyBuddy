@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Pay my buddy Application</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>Pay my buddy</h1>
+<h2>
+<!--     <span>Votre login <th:block th:text="${loginMail}">[loginMail]</th:block></span>
+    <span>Votre mot de passe <th:block th:text="${psswrd}">[psswrd]</th:block></span>
+     -->
+    <div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+</div>
+
+<div>
+    <label for="pass">Password (8 characters minimum):</label>
+    <input type="password" id="pass" name="password"
+           minlength="8" required>
+</div>
+
+<input type="submit" value="Sign in">
+</h2>
+</body>
+</html>

@@ -2,34 +2,47 @@ package com.paymybuddy.pmb.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "connection")
 public class Connection {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_CNX_PK")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID_CNX_PK", nullable = false, unique = true)
 	private Long idCnxPK;
-	@Column(name = "RECEIVER")
+	@Column(name = "RECEIVER", length = 50)
 	private String receiver;
-	@Column(name = "GIVER")
+	@Column(name = "GIVER", length = 50)
 	private String giver;
 
-	@Column(name = "LOGIN_MAIL_FK")
-	private String loginMailFK;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "ID_UA_FK", updatable = false, insertable = false)
+	private UserAccount userAccount;
 
-	public Connection(Long idCnxPK, String receiver, String giver, String loginMailFK) {
+	public Connection(Long idCnxPK, String receiver, String giver, UserAccount userAccount) {
 		this.idCnxPK = idCnxPK;
 		this.receiver = receiver;
 		this.giver = giver;
-		this.loginMailFK = loginMailFK;
+		this.userAccount = userAccount;
 	}
 
 	public Connection() {
 	}
+
+	/*
+	 * public UserAccount getUserAccount() { return userAccount; }
+	 * 
+	 * public void setUserAccount(UserAccount userAccount) { this.userAccount =
+	 * userAccount; }
+	 */
 
 	public Long getIdCnxPK() {
 		return idCnxPK;
@@ -53,14 +66,6 @@ public class Connection {
 
 	public void setGiver(String giver) {
 		this.giver = giver;
-	}
-
-	public String getLoginMailFK() {
-		return loginMailFK;
-	}
-
-	public void setLoginMailFK(String loginMailFK) {
-		this.loginMailFK = loginMailFK;
 	}
 
 }
