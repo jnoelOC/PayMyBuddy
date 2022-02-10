@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Pay my buddy Application</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<a th:href="@{/transfer}">
+	<button class="button buttonBlue">Return to transfer</button>
+</a>
+<h3 style="text-align:center">Add your connection :</h3>
+<form action="/addConnection" style="text-align:center;white-space:pre">
+  <label for="connections">Choose a connection:</label>
+  <select name="connections" id="connections">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
+  </select>
+  </br>
+  <input class="button buttonBlue" type="submit" value="Add">
+</form>
+</body>
+</html>

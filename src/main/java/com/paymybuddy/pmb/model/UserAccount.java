@@ -3,13 +3,15 @@ package com.paymybuddy.pmb.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -32,22 +34,21 @@ public class UserAccount {
 	@Column(name = "SOLDE")
 	private Integer solde;
 
-	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
+	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY)
 	public List<Transac> transacs = new ArrayList<>();
 
-	// @ManyToMany(fetch = FetchType.LAZY)
-	// @JoinTable(name = "toto", joinColumns = @JoinColumn(name = "ID_UA_PK"),
-	// inverseJoinColumns = @JoinColumn(name = "connection_id"))
-	// public List<UserAccount> connections = new ArrayList<>();
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "connection", joinColumns = @JoinColumn(name = "ID_UA_PK"), inverseJoinColumns = @JoinColumn(name = "connection_id"))
+	public List<UserAccount> connections = new ArrayList<>();
 
-	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
-	public List<Connection> connections = new ArrayList<>();
+//	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
+//	public List<Connection> connections = new ArrayList<>();
 
 	public UserAccount() {
 	}
 
 	public UserAccount(Long idPK, String loginMail, String psswrd, String firstName, String lastName, Integer solde,
-			List<Transac> transacs, List<Connection> connections) {
+			List<Transac> transacs, List<UserAccount> connections) {
 		this.idPK = idPK;
 		this.loginMail = loginMail;
 		this.psswrd = psswrd;
@@ -66,11 +67,11 @@ public class UserAccount {
 		this.transacs = transacs;
 	}
 
-	public List<Connection> getConnections() {
+	public List<UserAccount> getConnections() {
 		return connections;
 	}
 
-	public void setConnections(List<Connection> connections) {
+	public void setConnections(List<UserAccount> connections) {
 		this.connections = connections;
 	}
 

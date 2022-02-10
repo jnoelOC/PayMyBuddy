@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Pay my buddy Application</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home_style.css}" />
+     <link rel="stylesheet" type="text/css" th:href="@{/css/transfer_style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<div class="w3-container">
+	<div class="w3-display-container" style="height:200px">
+		<div class="center w3-display-middle">
+		<button class="button buttonGreen">PAY MY BUDDY</button>
+		</div>
+	</div>
+</div>
+	<ul style="border-radius:25px">
+	  <li><a href="/home">Home</a></li>
+	  <li><a href="/transfer">Transfer</a></li>
+	  <li><a href="#profile">Profile</a></li>
+	  <li><a href="#contact">Contact</a></li>
+	  <li style="float:right"><a class="active" href="/index">Log off</a></li>
+	</ul>
+</br>
+<h3 style="text-align:center">Send money
+<a th:href="@{/addConnection}">
+		<button class="button buttonBlue">Add connection</button>
+</a>
+</h3>
+
+<form action="/transfer" style="text-align:center;white-space:pre">
+  <label for="connections">Select a connection:</label>
+  <select name="connections" id="connections">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
+  </select>
+   <label for="amount">Amount:</label>
+  <input type="number" id="amount" name="amount" value="10" min="1" max="500">
+  <input class="button buttonBlue" type="submit" value="Pay">
+</form>
+</br></br>
+<h3 style="text-align:center">My transactions</h3>
+<table class="center">
+  <tr>
+    <th>Friend</th>
+    <th>Description</th>
+    <th>Amount</th>
+  </tr>
+  <tr>
+    <td>toto</td>
+    <td>restau</td>
+    <td>100</td>
+  </tr>
+  <tr>
+    <td>titi</td>
+    <td>cinema</td>
+    <td>40</td>
+  </tr>
+</table>
+
+</body>
+</html>

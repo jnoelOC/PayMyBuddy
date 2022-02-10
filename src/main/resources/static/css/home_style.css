@@ -1,0 +1,27 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color:rgb(192, 192, 192); /* #333;*/
+}
+
+li {
+  float:left; 
+}
+
+li a {
+  display:flex;/* block;*/
+  flex:content;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #4CAF50;
+}
+.active {
+  background-color : #4CAF50 /* #04AA6D;*/
+}

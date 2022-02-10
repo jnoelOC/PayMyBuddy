@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.repository.IUserAccountRepository;
 
@@ -29,24 +28,24 @@ public class UserAccountService implements IUserAccountService {
 		return userAccountRepository.save(userAccount);
 	}
 
-	@Transactional
-	public UserAccount addConxUserAccount(UserAccount sender) {
+//	@Transactional
+//	public UserAccount addConxUserAccount(UserAccount sender) {
 //		UserAccount receiver;
 //		create connection between sender and email from list of friends (receiverEmail)
 //		List<Connection> conn = new ArrayList<>();
 //		conn.add(new Connection(10L, userAccount));
 //		userAccount.setConnections(conn);
 //		return userAccountRepository.save(sender);
-	}
+//	}
 
-	@Transactional
-	public Transac transferMoneyUserAccount(UserAccount uaSender, UserAccount uaReceiver) {
+//	@Transactional
+//	public Transac transferMoneyUserAccount(UserAccount uaSender, UserAccount uaReceiver) {
 //		Transac transac;
 //		retrieve selected connection from view
 //		retrieve amount from view
 //		transac = userAccount.TransferMoney
 //		return userAccountRepository.save(userAccount);
-	}
+//	}
 
 	@Transactional
 	public void deleteUserAccount(UserAccount userAccount) {

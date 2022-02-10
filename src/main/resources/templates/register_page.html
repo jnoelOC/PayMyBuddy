@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Pay my buddy Application</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+<a th:href="@{/index}">
+	<button class="button buttonBlue">Pay my buddy</button>
+</a>
+<h3 style="text-align:center">Enter your information :</h3>
+<form style="text-align:center;white-space:pre" action="/register" method="get">
+ <!--  th:object="${useraccount}">
+	<input type="text" th:name="${useraccount.firstname}">
+	<input type="text" th:name="${useraccount.lastname}"> -->
+	<label for="fname">FirstName</label>
+	<input type="text" id="fname" name="fname"></br>
+	<label for="lname">LastName</label>
+	<input type="text" id="lname" name="lname"> </br>
+	<label for="login">Login</label>
+ 	<input type="text" id="login" name="login"></br>
+ 	<label for="password">Password</label>
+	<input type="text" id="password" name="password"></br></br>
+	<input class="button buttonBlue" type="submit" value="Register" name="Register">
+	<!--  th:href="@{/transfer}"> -->
+</form>
+</body>
+</html>
