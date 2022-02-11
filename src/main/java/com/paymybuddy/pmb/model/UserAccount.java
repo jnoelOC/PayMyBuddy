@@ -12,11 +12,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "user_account")
+@JsonIgnoreProperties(value = { "connections" })
 public class UserAccount {
 
 	@Id
@@ -34,10 +39,13 @@ public class UserAccount {
 	@Column(name = "SOLDE")
 	private Integer solde;
 
-	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY)
-	public List<Transac> transacs = new ArrayList<>();
+//	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY)
+//	public List<Transac> transacs = new ArrayList<>();
 
+//	@ManyToMany(fetch = FetchType.EAGER)
+//	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
 	@ManyToMany(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
 	@JoinTable(name = "connection", joinColumns = @JoinColumn(name = "ID_UA_PK"), inverseJoinColumns = @JoinColumn(name = "connection_id"))
 	public List<UserAccount> connections = new ArrayList<>();
 
@@ -47,25 +55,22 @@ public class UserAccount {
 	public UserAccount() {
 	}
 
-	public UserAccount(Long idPK, String loginMail, String psswrd, String firstName, String lastName, Integer solde,
-			List<Transac> transacs, List<UserAccount> connections) {
+	public UserAccount(Long idPK, String loginMail, String psswrd, String firstName, String lastName, Integer solde) {
 		this.idPK = idPK;
 		this.loginMail = loginMail;
 		this.psswrd = psswrd;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.solde = solde;
-		this.transacs = transacs;
-		this.connections = connections;
 	}
 
-	public List<Transac> getTransacs() {
-		return transacs;
-	}
-
-	public void setTransacs(List<Transac> transacs) {
-		this.transacs = transacs;
-	}
+//	public List<Transac> getTransacs() {
+//		return transacs;
+//	}
+//
+//	public void setTransacs(List<Transac> transacs) {
+//		this.transacs = transacs;
+//	}
 
 	public List<UserAccount> getConnections() {
 		return connections;

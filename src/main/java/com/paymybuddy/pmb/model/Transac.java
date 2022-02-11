@@ -2,12 +2,9 @@ package com.paymybuddy.pmb.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,30 +24,28 @@ public class Transac {
 	@Column(name = "RECEIVER", length = 50)
 	private String receiver;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_UA_FK", updatable = false, insertable = false)
-	private UserAccount userAccount;
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "ID_UA_FK", updatable = false, insertable = false)
+//	private UserAccount userAccount;
 
 	public Transac() {
 	}
 
-	public Transac(Long idTransaction, String description, Integer amount, String giver, String receiver,
-			UserAccount userAccount) {
+	public Transac(Long idTransaction, String description, Integer amount, String giver, String receiver) {
 		this.idTransaction = idTransaction;
 		this.description = description;
 		this.amount = amount;
 		this.giver = giver;
 		this.receiver = receiver;
-		this.userAccount = userAccount;
 	}
 
-	public UserAccount getUserAccount() {
-		return userAccount;
-	}
-
-	public void setUserAccount(UserAccount userAccount) {
-		this.userAccount = userAccount;
-	}
+//	public UserAccount getUserAccount() {
+//		return userAccount;
+//	}
+//
+//	public void setUserAccount(UserAccount userAccount) {
+//		this.userAccount = userAccount;
+//	}
 
 	public Long getIdTransaction() {
 		return idTransaction;

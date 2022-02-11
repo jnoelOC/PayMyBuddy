@@ -1,5 +1,6 @@
 package com.paymybuddy.pmb.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,23 +29,26 @@ public class UserAccountService implements IUserAccountService {
 		return userAccountRepository.save(userAccount);
 	}
 
-//	@Transactional
-//	public UserAccount addConxUserAccount(UserAccount sender) {
-//		UserAccount receiver;
-//		create connection between sender and email from list of friends (receiverEmail)
-//		List<Connection> conn = new ArrayList<>();
-//		conn.add(new Connection(10L, userAccount));
-//		userAccount.setConnections(conn);
-//		return userAccountRepository.save(sender);
-//	}
+	@Transactional
+	public UserAccount addConxUserAccount(UserAccount sender) {
+
+		UserAccount receiver = new UserAccount(null, "cs@gmail.com", "cs", "clement", "sezettre", 80);
+		List<UserAccount> listOfConnections = new ArrayList<>();
+		listOfConnections.add(receiver);
+
+		sender.setConnections(listOfConnections);
+
+		return userAccountRepository.save(sender);
+	}
 
 //	@Transactional
-//	public Transac transferMoneyUserAccount(UserAccount uaSender, UserAccount uaReceiver) {
+//	public Transac transferMoneyUserAccount(UserAccount sender) {
 //		Transac transac;
 //		retrieve selected connection from view
+//		UserAccount receiver;
 //		retrieve amount from view
 //		transac = userAccount.TransferMoney
-//		return userAccountRepository.save(userAccount);
+//		return userAccountRepository.save(sender);
 //	}
 
 	@Transactional

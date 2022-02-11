@@ -9,5 +9,7 @@ public interface IUserAccountService {
 
 	public UserAccount saveUserAccount(UserAccount userAccount);
 
+	public UserAccount addConxUserAccount(UserAccount sender);
+
 	public void deleteUserAccount(UserAccount userAccount);
 }

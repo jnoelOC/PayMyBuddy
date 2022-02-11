@@ -38,6 +38,19 @@ public class UserAccountController {
 		return lua;
 	}
 
+	@PostMapping("/useraccount/addconnection")
+	public ResponseEntity<UserAccount> addConnection(@RequestBody UserAccount userAccount) {
+
+		UserAccount ua = userAccountService.addConxUserAccount(userAccount);
+
+		if (ua.getLoginMail().isEmpty()) {
+			logger.error("Erreur dans add connection : status No PK.");
+			return new ResponseEntity<>(ua, HttpStatus.NOT_FOUND);
+		}
+		logger.info("connection ajoutée.");
+		return new ResponseEntity<>(ua, HttpStatus.CREATED);
+	}
+
 	@PostMapping("/useraccount/create")
 	public ResponseEntity<UserAccount> createUserAccount(@RequestBody UserAccount userAccount) {
 
