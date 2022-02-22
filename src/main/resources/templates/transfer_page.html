@@ -10,20 +10,9 @@
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
-<div class="w3-container">
-	<div class="w3-display-container" style="height:200px">
-		<div class="center w3-display-middle">
-		<button class="button buttonGreen">PAY MY BUDDY</button>
-		</div>
-	</div>
-</div>
-	<ul style="border-radius:25px">
-	  <li><a href="/home">Home</a></li>
-	  <li><a href="/transfer">Transfer</a></li>
-	  <li><a href="#profile">Profile</a></li>
-	  <li><a href="#contact">Contact</a></li>
-	  <li style="float:right"><a class="active" href="/index">Log off</a></li>
-	</ul>
+<div th:replace="/header_fragment :: #my_template_logo"></div>
+<div th:replace="/nav_fragment :: #my_template_nav"></div>
+
 </br>
 <h3 style="text-align:center">Send money
 <a th:href="@{/addConnection}">
@@ -31,36 +20,34 @@
 </a>
 </h3>
 
-<form action="/transfer" style="text-align:center;white-space:pre">
-  <label for="connections">Select a connection:</label>
-  <select name="connections" id="connections">
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-    <option value="opel">Opel</option>
-    <option value="audi">Audi</option>
+<form th:action="@{/transfer}" style="text-align:center;white-space:pre">
+  <label for="userconnections">Select a connection:</label>
+  <select name="userconnections" id="userconnections">
+    <option th:each="connection : ${userconnections}" 
+    		th:text="${connection}"
+    		th:value="${connection}" 
+    		></option>
   </select>
-   <label for="amount">Amount:</label>
-  <input type="number" id="amount" name="amount" value="10" min="1" max="500">
+  <label for="description">Description:</label>
+  	<input type="text" id="description" name="description" value="description">
+  <label for="amount">Amount:</label>
+ 	<input type="number" id="amount" name="amount" value="10" min="1" max="500">
   <input class="button buttonBlue" type="submit" value="Pay">
 </form>
 </br></br>
 <h3 style="text-align:center">My transactions</h3>
 <table class="center">
-  <tr>
-    <th>Friend</th>
-    <th>Description</th>
-    <th>Amount</th>
-  </tr>
-  <tr>
-    <td>toto</td>
-    <td>restau</td>
-    <td>100</td>
-  </tr>
-  <tr>
-    <td>titi</td>
-    <td>cinema</td>
-    <td>40</td>
-  </tr>
+  	<tr>
+    	<th>Friend</th> <th>Description</th> <th>Amount</th>
+    </tr>
+<!--  <tr th:each="transac:${transacs}">
+    <td th:text="${transac.firstName}"></td>
+    <td th:text="${transac.description}"></td>
+    <td th:text="${transac.amount}"></td> 
+  </tr>--> 
+  <tr th:each="transac:${transacs}">
+    <td  th:text="${transac}"></td>
+  </tr> 
 </table>
 
 </body>

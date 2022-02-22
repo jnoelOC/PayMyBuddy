@@ -4,21 +4,25 @@
     <meta charset="UTF-8"/>
     <title>Pay my buddy Application</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home_style.css}" />
+     <link rel="stylesheet" type="text/css" th:href="@{/css/transfer_style.css}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
+<div th:replace="/header_fragment :: #my_template_logo"></div>
+<div th:replace="/nav_fragment :: #my_template_nav"></div>
+<!-- 
 <a th:href="@{/transfer}">
 	<button class="button buttonBlue">Return to transfer</button>
-</a>
-<h3 style="text-align:center">Add your connection :</h3>
+</a> -->
+<h3 style="text-align:center">Choose your connection :</h3>
 <form action="/addConnection" style="text-align:center;white-space:pre">
-  <label for="connections">Choose a connection:</label>
-  <select name="connections" id="connections">
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-    <option value="opel">Opel</option>
-    <option value="audi">Audi</option>
+  <label for="connections"></label>
+ <select name="connections" id="connections">
+    <option th:each="connection : ${connections}" 
+    		th:text="${connection}"
+    		th:value="${connection}"></option>
   </select>
   </br>
   <input class="button buttonBlue" type="submit" value="Add">

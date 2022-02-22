@@ -1,5 +1,6 @@
 package com.paymybuddy.pmb.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -7,13 +8,16 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.service.UserAccountService;
 
@@ -38,6 +42,18 @@ public class UserAccountController {
 		return lua;
 	}
 
+	@RequestMapping("/useraccount/addoneconnection")
+	public String addOneConnection(Model model) {
+		List<UserAccount> lua = userAccountService.findAllUserAccounts();
+		// model.addAttribute("transfer_page", lua.get(0).getFirstName());
+		List<String> names = new ArrayList<>();
+		names.add("clement");
+		names.add("jean-noel");
+		names.add("toto");
+		model.addAttribute("firstNames", names);
+		return "transfer_page :: #connections";
+	}
+
 	@PostMapping("/useraccount/addconnection")
 	public ResponseEntity<UserAccount> addConnection(@RequestBody UserAccount userAccount) {
 
@@ -49,6 +65,19 @@ public class UserAccountController {
 		}
 		logger.info("connection ajoutée.");
 		return new ResponseEntity<>(ua, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/useraccount/pay")
+	public ResponseEntity<Transac> transferMoney(@RequestBody UserAccount userAccount) {
+
+		Transac trx = userAccountService.transferMoneyUserAccount(userAccount);
+
+		if (trx.getIdTransaction() <= 0) {
+			logger.error("Erreur dans transfer money : status No PK.");
+			return new ResponseEntity<>(trx, HttpStatus.NOT_FOUND);
+		}
+		logger.info("transaction ajoutée.");
+		return new ResponseEntity<>(trx, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/useraccount/create")

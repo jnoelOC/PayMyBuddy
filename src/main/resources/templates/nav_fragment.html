@@ -5,13 +5,19 @@
     <title>Pay my buddy Application</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/home_style.css}" />
+     <link rel="stylesheet" type="text/css" th:href="@{/css/transfer_style.css}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
-<div th:replace="/header_fragment :: #my_template_logo"></div>
-<div th:replace="/nav_fragment :: #my_template_nav"></div>
-
-<h3 style="text-align:center">Welcome to transfer money to your friends !</h3>
+<div id="my_template_nav">
+		<ul style="border-radius:25px">
+	  <li><a href="/home">Home</a></li>
+	  <li><a href="/transfer">Transfer</a></li>
+	  <li><a href="#profile">Profile</a></li>
+	  <li><a href="#contact">Contact</a></li>
+	  <li style="float:right"><a class="active" href="/index">Log off</a></li>
+	</ul>
+</div>
 </body>
 </html>

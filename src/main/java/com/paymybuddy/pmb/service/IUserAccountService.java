@@ -2,6 +2,7 @@ package com.paymybuddy.pmb.service;
 
 import java.util.List;
 
+import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
 
 public interface IUserAccountService {
@@ -10,6 +11,10 @@ public interface IUserAccountService {
 	public UserAccount saveUserAccount(UserAccount userAccount);
 
 	public UserAccount addConxUserAccount(UserAccount sender);
+
+	public List<UserAccount> retrieveConxUserAccount(UserAccount sender);
+
+	public Transac transferMoneyUserAccount(UserAccount sender);
 
 	public void deleteUserAccount(UserAccount userAccount);
 }
