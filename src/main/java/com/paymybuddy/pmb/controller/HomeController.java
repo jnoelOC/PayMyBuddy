@@ -49,8 +49,8 @@ public class HomeController {
 
 		List<UserAccount> lua = userAccountService.findAllUserAccounts();
 		Set<String> connections = new HashSet<>();
-		for (Integer i = 0; i < lua.size(); i++) {
-			connections.add(lua.get(i).getFirstName());
+		for (UserAccount ua : lua) {
+			connections.add(ua.getFirstName());
 		}
 		return connections;
 	}
@@ -63,8 +63,8 @@ public class HomeController {
 		List<UserAccount> lua = userAccountService.retrieveConxUserAccount(ua);
 		// ua.getConnections();
 		Set<String> connections = new HashSet<>();
-		for (Integer i = 0; i < lua.size(); i++) {
-			connections.add(lua.get(i).getFirstName());
+		for (UserAccount usac : lua) {
+			connections.add(usac.getFirstName());
 		}
 		return connections;
 	}

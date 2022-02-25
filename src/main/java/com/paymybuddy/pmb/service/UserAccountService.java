@@ -2,6 +2,8 @@ package com.paymybuddy.pmb.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,7 +66,10 @@ public class UserAccountService implements IUserAccountService {
 //		List<Long> listOfLg = pageOfLg.getContent();
 		for (Long lng : listOfLg) {
 
-			connections.add(userAccountRepository.getById(lng));
+			Optional<UserAccount> ua = userAccountRepository.findById(lng);
+			if (ua.isPresent()) {
+				connections = ua.stream().collect(Collectors.toList());
+			}
 		}
 
 		return connections;

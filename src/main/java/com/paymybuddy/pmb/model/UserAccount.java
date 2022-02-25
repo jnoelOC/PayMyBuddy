@@ -26,8 +26,8 @@ public class UserAccount {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID_UA_PK", nullable = false, unique = true)
-	private Long idPK;
+	@Column(name = "id", nullable = false, unique = true)
+	private Long id;
 	@Column(name = "LOGIN_MAIL", length = 50)
 	private String loginMail;
 	@Column(name = "PSSWRD", length = 50)
@@ -46,7 +46,7 @@ public class UserAccount {
 //	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
 	@ManyToMany(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
-	@JoinTable(name = "connection", joinColumns = @JoinColumn(name = "ID_UA_PK"), inverseJoinColumns = @JoinColumn(name = "connection_id"))
+	@JoinTable(name = "connection", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "connection_id"))
 	public List<UserAccount> connections = new ArrayList<>();
 
 //	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
@@ -56,7 +56,7 @@ public class UserAccount {
 	}
 
 	public UserAccount(Long idPK, String loginMail, String psswrd, String firstName, String lastName, Integer solde) {
-		this.idPK = idPK;
+		this.id = idPK;
 		this.loginMail = loginMail;
 		this.psswrd = psswrd;
 		this.firstName = firstName;
@@ -81,11 +81,11 @@ public class UserAccount {
 	}
 
 	public Long getIdPK() {
-		return idPK;
+		return id;
 	}
 
-	public void setIdPK(Long idPK) {
-		this.idPK = idPK;
+	public void setIdPK(Long id) {
+		this.id = id;
 	}
 
 	public String getLoginMail() {

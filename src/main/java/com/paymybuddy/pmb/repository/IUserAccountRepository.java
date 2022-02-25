@@ -21,7 +21,7 @@ public interface IUserAccountRepository extends JpaRepository<UserAccount, Long>
 
 //	@Query(nativeQuery = true, value = "SELECT * FROM connection c, useraccount u WHERE :x = c.id_ua_pk")
 //	@Query(nativeQuery = true, value = "SELECT * FROM connection c")
-	@Query(nativeQuery = true, value = "SELECT connection_id FROM connection c WHERE c.id_ua_pk = :x")
+	@Query(nativeQuery = true, value = "SELECT connection_id FROM connection c WHERE c.id = :x")
 	public List<Long> chercherConnexions(@Param("x") Long idConnx);
 //	public Page<Long> chercherConnexions(@Param("x") Long idConnx, Pageable pageable);
 //	List<UserAccount> findByConnections(List<UserAccount> connections);
