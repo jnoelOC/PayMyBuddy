@@ -68,7 +68,9 @@ public class UserAccountService implements IUserAccountService {
 
 			Optional<UserAccount> ua = userAccountRepository.findById(lng);
 			if (ua.isPresent()) {
-				connections = ua.stream().collect(Collectors.toList());
+
+				// connections = ua.stream().collect(Collectors.toList());
+				connections.addAll(ua.stream().collect(Collectors.toList()));
 			}
 		}
 

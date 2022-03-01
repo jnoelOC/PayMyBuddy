@@ -3,7 +3,10 @@ package com.paymybuddy.pmb.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.service.UserAccountService;
 
@@ -33,15 +38,47 @@ public class HomeController {
 	}
 
 	@ModelAttribute("transacs")
-	public List<String> getTransacs() {
-		List<String> transacs = new ArrayList<>();
-		transacs.add("tutu");
-		transacs.add("cinema");
-		transacs.add("45");
-		transacs.add("titi");
-		transacs.add("restau");
-		transacs.add("150");
+	public List<Transac> getTransacs() {
+		List<Transac> transacs = new ArrayList<>();
+		transacs.add(new Transac(1L, "restau", 100, "jn@gmail.com", "cs@gmail.com"));
+		transacs.add(new Transac(2L, "cinema", 40, "jn@gmail.com", "cs@gmail.com"));
+		transacs.add(new Transac(3L, "theatre", 120, "jn@gmail.com", "cs@gmail.com"));
+		transacs.add(new Transac(4L, "co-voiturage", 20, "jn@gmail.com", "cs@gmail.com"));
 		return transacs;
+	}
+
+	@GetMapping("/addConnection6666666666666")
+	public List<String> addConnectionFromChoice(HttpServletRequest request) {
+//	public List<String> addConnectionFromChoice(@RequestBody MultiValueMap<String, String> formData) {
+//@RequestBody MultiValueMap<String, String> formData
+		Map<String, String[]> parameterMap = request.getParameterMap();
+
+//		String val = formData.getFirst("choiceOfConnection");
+
+		int allParam = parameterMap.size();
+//		Collection<List<String>> ls = formData.values();
+		// recuperer le choix de connection par l'user dans addConnection_page.html
+
+		// recuperer en param le sender
+		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
+
+		// recuperer la liste des connx du sender
+		List<UserAccount> luaSender = userAccountService.retrieveConxUserAccount(sender);
+
+		String choiceOfConnection = "Fifi";
+
+		List<String> connections = new ArrayList<>();
+		// recuperer le premier useraccount avec firstName==choiceOfConnection
+		List<UserAccount> luaFirstname = userAccountService.findAllUserAccounts();
+		for (UserAccount ua : luaFirstname) {
+			if (ua.getFirstName().equals(choiceOfConnection)) {
+				// copier le choiceOfConnection dans liste des connections de transfer_page.html
+				connections.add(ua.getFirstName());
+				break;
+			}
+		}
+
+		return connections;
 	}
 
 	@ModelAttribute("connections")
@@ -56,13 +93,13 @@ public class HomeController {
 	}
 
 	@ModelAttribute("userconnections")
-	public Set<String> getConnectionsOfOneUser() {
+	public List<String> getConnectionsOfOneUser() {
 
-		UserAccount ua = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
+		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
 
-		List<UserAccount> lua = userAccountService.retrieveConxUserAccount(ua);
-		// ua.getConnections();
-		Set<String> connections = new HashSet<>();
+		List<UserAccount> lua = userAccountService.retrieveConxUserAccount(sender);
+
+		List<String> connections = new ArrayList<>();
 		for (UserAccount usac : lua) {
 			connections.add(usac.getFirstName());
 		}
@@ -85,9 +122,42 @@ public class HomeController {
 		return "register_page";
 	}
 
-	@GetMapping({ "/addConnection" })
-	public String addConnection(Model model) {
-		return "addConnection_page";
+	@GetMapping("/addConnection")
+	public ModelAndView addConnection() {
+//			@RequestParam(name = "choiceOfConnection", required = false) String choiceOfConnection) {
+
+		ModelAndView mav = new ModelAndView("addConnection_page");
+//		int total = connections.size();
+
+		// recuperer en param le sender
+//		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
+//
+//		// recuperer la liste des connx du sender
+//		List<UserAccount> lConnxSender = userAccountService.retrieveConxUserAccount(sender);
+//
+//		List<String> connections = new ArrayList<>();
+//		// recuperer le premier useraccount avec firstName==choiceOfConnection
+		List<UserAccount> lua = userAccountService.findAllUserAccounts();
+//		for (UserAccount ua : luaFirstname) {
+//			if (ua.getFirstName().equals(choiceOfConnection)) {
+//				// copier le choiceOfConnection dans table des connections
+//				connections.add(ua.getFirstName());
+//				break;
+//			}
+//		}
+//		return connections;	
+//				
+		// recuperer le choix de connection par l'user dans addConnection_page.html
+
+		mav.addObject("connections", lua);
+//		Map<String, Object> mso = mav.getModel();
+
+		// var mod = mav.getModel();
+//		var viou = mav.getView();
+//		viou.getContentType();
+
+//		return "addConnection_page";
+		return mav;
 	}
 
 	@GetMapping({ "/user" })

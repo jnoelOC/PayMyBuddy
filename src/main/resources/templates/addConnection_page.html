@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pay my buddy Application</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/home_style.css}" />
@@ -17,15 +18,27 @@
 	<button class="button buttonBlue">Return to transfer</button>
 </a> -->
 <h3 style="text-align:center">Choose your connection :</h3>
-<form action="/addConnection" style="text-align:center;white-space:pre">
-  <label for="connections"></label>
- <select name="connections" id="connections">
+<form th:action="@{/addConnection}" style="text-align:center;white-space:pre" method="get">
+  <label for="connections"></label> 
+  <select name="connections" id="connectionsId">
     <option th:each="connection : ${connections}" 
-    		th:text="${connection}"
-    		th:value="${connection}"></option>
+    		th:text="${connection.firstName}"
+    		></option>
+    		<!--     		th:value="${connection}"  -->
   </select>
   </br>
-  <input class="button buttonBlue" type="submit" value="Add">
+   <input class="button buttonBlue" type="submit" onclick="retrieveSelectedValueOfDropdown()" 
+   value="Add" name="choiceOfConnection"/>
 </form>
+<p id="demo"></p>
+<script>
+	function retrieveSelectedValueOfDropdown(){
+		 var selectedValue = document.getElementById("connectionsId").value;
+//		 document.getElementById("demo").innerHTML = selectedValue ;
+		 alert("The name of the selected connection is: " + selectedValue );
+//		 return selectedValue;
+	}
+</script>
+
 </body>
 </html>
