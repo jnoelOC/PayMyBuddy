@@ -25,7 +25,7 @@ public class Transac {
 	private String receiver;
 
 //	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "ID_UA_FK", updatable = false, insertable = false)
+//	@JoinColumn(name = "id", updatable = false, insertable = false)
 //	private UserAccount userAccount;
 
 	public Transac() {

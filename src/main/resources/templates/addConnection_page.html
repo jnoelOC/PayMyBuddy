@@ -16,27 +16,37 @@
 <!-- 
 <a th:href="@{/transfer}">
 	<button class="button buttonBlue">Return to transfer</button>
-</a> -->
+</a> -->  
+
+<!--
+<a class="button buttonBlue" onclick="return confirm('Are you sure Add connection ?')"
+  th:href="@{/addConnection(idContact=${connection.id})}">Add conx</a>
+-->  
+
 <h3 style="text-align:center">Choose your connection :</h3>
-<form th:action="@{/addConnection}" style="text-align:center;white-space:pre" method="get">
+<form th:action="@{/addConnection}" style="text-align:center;white-space:pre" method="post">
   <label for="connections"></label> 
   <select name="connections" id="connectionsId">
     <option th:each="connection : ${connections}" 
+    		th:value="${connection.firstName}"
     		th:text="${connection.firstName}"
     		></option>
-    		<!--     		th:value="${connection}"  -->
   </select>
   </br>
-   <input class="button buttonBlue" type="submit" onclick="retrieveSelectedValueOfDropdown()" 
-   value="Add" name="choiceOfConnection"/>
+<!--  <input class="button buttonBlue" type="submit" value="Add"/>-->
+    
+    <a class="button buttonBlue" 
+  		th:href="@{/addConnection(firstName=${connection.firstName})}">Add connection</a>
+    		
+  <!--  <input class="button buttonBlue" type="submit" value="Add"
+    onclick="retrieveSelectedValueOfDropdown()"/> -->
 </form>
 <p id="demo"></p>
 <script>
 	function retrieveSelectedValueOfDropdown(){
 		 var selectedValue = document.getElementById("connectionsId").value;
-//		 document.getElementById("demo").innerHTML = selectedValue ;
-		 alert("The name of the selected connection is: " + selectedValue );
-//		 return selectedValue;
+		 alert("The name of your selected friend is: " + selectedValue );
+		 return selectedValue;
 	}
 </script>
 

@@ -39,6 +39,10 @@ public class UserAccount {
 	@Column(name = "SOLDE")
 	private Integer solde;
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
+	public List<BankAccount> bankAccounts = new ArrayList<>();
+
 //	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY)
 //	public List<Transac> transacs = new ArrayList<>();
 

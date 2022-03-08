@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.paymybuddy.pmb.model.Transac;
@@ -124,40 +125,22 @@ public class HomeController {
 
 	@GetMapping("/addConnection")
 	public ModelAndView addConnection() {
-//			@RequestParam(name = "choiceOfConnection", required = false) String choiceOfConnection) {
-
+		// populate list of connections
 		ModelAndView mav = new ModelAndView("addConnection_page");
-//		int total = connections.size();
-
-		// recuperer en param le sender
-//		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
-//
-//		// recuperer la liste des connx du sender
-//		List<UserAccount> lConnxSender = userAccountService.retrieveConxUserAccount(sender);
-//
-//		List<String> connections = new ArrayList<>();
-//		// recuperer le premier useraccount avec firstName==choiceOfConnection
 		List<UserAccount> lua = userAccountService.findAllUserAccounts();
-//		for (UserAccount ua : luaFirstname) {
-//			if (ua.getFirstName().equals(choiceOfConnection)) {
-//				// copier le choiceOfConnection dans table des connections
-//				connections.add(ua.getFirstName());
-//				break;
-//			}
-//		}
-//		return connections;	
-//				
-		// recuperer le choix de connection par l'user dans addConnection_page.html
-
 		mav.addObject("connections", lua);
-//		Map<String, Object> mso = mav.getModel();
 
-		// var mod = mav.getModel();
-//		var viou = mav.getView();
-//		viou.getContentType();
-
-//		return "addConnection_page";
 		return mav;
+	}
+
+	@PostMapping("/addConnection")
+	public String addConnection(
+			@RequestParam(name = "firstName", required = false, defaultValue = "momo") final String firstName) {
+
+		String val = firstName;
+
+//		return "redirect:/transfer";
+		return "addConnection_page";
 	}
 
 	@GetMapping({ "/user" })
