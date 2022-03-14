@@ -39,15 +39,26 @@ public class UserAccountService implements IUserAccountService {
 	}
 
 	@Transactional
-	public UserAccount addConxUserAccount(UserAccount sender) {
+	public UserAccount addConxUserAccount(UserAccount sender, Long idOfReceiver) {
 
 		List<UserAccount> connections = new ArrayList<>();
-//		userAccountRepository.findByConnections(connections);
 
-		UserAccount receiver = new UserAccount(null, "to@gmail.com", "to", "toto", "TOTO", 60);
-		connections.add(receiver);
+		// remplir la liste des connexions du sender
+		List<UserAccount> luaOfSender = retrieveConxUserAccount(sender);
+		for (UserAccount ua : luaOfSender) {
+			connections.add(ua);
+		}
+
+		// Trouver le receiver par son id
+		List<UserAccount> lua = findAllUserAccounts();
+		for (UserAccount uaReceiver : lua) {
+			if (uaReceiver.getId().equals(idOfReceiver)) {
+				connections.add(uaReceiver);
+				break;
+			}
+		}
+
 		sender.setConnections(connections);
-
 		return userAccountRepository.save(sender);
 	}
 
@@ -61,7 +72,7 @@ public class UserAccountService implements IUserAccountService {
 		List<Long> listOfLg = null;
 		Long lg = 0L;
 		// pageOfLg = userAccountRepository.chercherConnexions(sender.getIdPK(), page);
-		listOfLg = userAccountRepository.chercherConnexions(sender.getIdPK());
+		listOfLg = userAccountRepository.chercherConnexions(sender.getId());
 
 //		List<Long> listOfLg = pageOfLg.getContent();
 		for (Long lng : listOfLg) {

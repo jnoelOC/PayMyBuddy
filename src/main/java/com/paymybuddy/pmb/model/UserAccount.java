@@ -53,14 +53,11 @@ public class UserAccount {
 	@JoinTable(name = "connection", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "connection_id"))
 	public List<UserAccount> connections = new ArrayList<>();
 
-//	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
-//	public List<Connection> connections = new ArrayList<>();
-
 	public UserAccount() {
 	}
 
-	public UserAccount(Long idPK, String loginMail, String psswrd, String firstName, String lastName, Integer solde) {
-		this.id = idPK;
+	public UserAccount(Long id, String loginMail, String psswrd, String firstName, String lastName, Integer solde) {
+		this.id = id;
 		this.loginMail = loginMail;
 		this.psswrd = psswrd;
 		this.firstName = firstName;
@@ -84,11 +81,11 @@ public class UserAccount {
 		this.connections = connections;
 	}
 
-	public Long getIdPK() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setIdPK(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

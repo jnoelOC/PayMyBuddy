@@ -10,7 +10,7 @@ public interface IUserAccountService {
 
 	public UserAccount saveUserAccount(UserAccount userAccount);
 
-	public UserAccount addConxUserAccount(UserAccount sender);
+	public UserAccount addConxUserAccount(UserAccount sender, Long idOfReceiver);
 
 	public List<UserAccount> retrieveConxUserAccount(UserAccount sender);
 

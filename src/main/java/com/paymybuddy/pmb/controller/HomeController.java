@@ -3,10 +3,7 @@ package com.paymybuddy.pmb.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
@@ -46,40 +42,6 @@ public class HomeController {
 		transacs.add(new Transac(3L, "theatre", 120, "jn@gmail.com", "cs@gmail.com"));
 		transacs.add(new Transac(4L, "co-voiturage", 20, "jn@gmail.com", "cs@gmail.com"));
 		return transacs;
-	}
-
-	@GetMapping("/addConnection6666666666666")
-	public List<String> addConnectionFromChoice(HttpServletRequest request) {
-//	public List<String> addConnectionFromChoice(@RequestBody MultiValueMap<String, String> formData) {
-//@RequestBody MultiValueMap<String, String> formData
-		Map<String, String[]> parameterMap = request.getParameterMap();
-
-//		String val = formData.getFirst("choiceOfConnection");
-
-		int allParam = parameterMap.size();
-//		Collection<List<String>> ls = formData.values();
-		// recuperer le choix de connection par l'user dans addConnection_page.html
-
-		// recuperer en param le sender
-		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
-
-		// recuperer la liste des connx du sender
-		List<UserAccount> luaSender = userAccountService.retrieveConxUserAccount(sender);
-
-		String choiceOfConnection = "Fifi";
-
-		List<String> connections = new ArrayList<>();
-		// recuperer le premier useraccount avec firstName==choiceOfConnection
-		List<UserAccount> luaFirstname = userAccountService.findAllUserAccounts();
-		for (UserAccount ua : luaFirstname) {
-			if (ua.getFirstName().equals(choiceOfConnection)) {
-				// copier le choiceOfConnection dans liste des connections de transfer_page.html
-				connections.add(ua.getFirstName());
-				break;
-			}
-		}
-
-		return connections;
 	}
 
 	@ModelAttribute("connections")
@@ -124,23 +86,42 @@ public class HomeController {
 	}
 
 	@GetMapping("/addConnection")
-	public ModelAndView addConnection() {
-		// populate list of connections
-		ModelAndView mav = new ModelAndView("addConnection_page");
+	public String addConnectionGet(Model model) {
+		// populate list of all connections
 		List<UserAccount> lua = userAccountService.findAllUserAccounts();
-		mav.addObject("connections", lua);
+		model.addAttribute("connections", lua);
 
-		return mav;
+		return "/addConnection_page";
 	}
 
 	@PostMapping("/addConnection")
-	public String addConnection(
-			@RequestParam(name = "firstName", required = false, defaultValue = "momo") final String firstName) {
+	public String addConnectionPost(
+			@RequestParam(value = "connection", name = "connection", required = false) Long connection) {
 
-		String val = firstName;
+		// recuperer le choix de l'utilisateur
+		Long choiceOfConx = connection;
+		// recuperer en param le sender
+		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
+		// Ajouter une connexion à la liste des connexions du sender
+		UserAccount ua = userAccountService.addConxUserAccount(sender, choiceOfConx);
 
-//		return "redirect:/transfer";
-		return "addConnection_page";
+//		// recuperer la liste des conx du sender
+//		List<UserAccount> luaSender = userAccountService.retrieveConxUserAccount(sender);
+//
+//
+//		List<String> connections = new ArrayList<>();
+//		// recuperer le premier useraccount avec firstName==choiceOfConnection
+//		List<UserAccount> luaFirstname = userAccountService.findAllUserAccounts();
+//		for (UserAccount ua : luaFirstname) {
+//			if (ua.getFirstName().equals(choiceOfConnection)) {
+//				// copier le choiceOfConnection dans liste des connections de transfer_page.html
+//				connections.add(ua.getFirstName());
+//				break;
+//			}
+//		}
+
+		return "redirect:/transfer";
+//		return "addConnection_page";
 	}
 
 	@GetMapping({ "/user" })

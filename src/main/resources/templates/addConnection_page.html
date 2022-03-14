@@ -26,21 +26,41 @@
 <h3 style="text-align:center">Choose your connection :</h3>
 <form th:action="@{/addConnection}" style="text-align:center;white-space:pre" method="post">
   <label for="connections"></label> 
-  <select name="connections" id="connectionsId">
-    <option th:each="connection : ${connections}" 
-    		th:value="${connection.firstName}"
+  <select name="connection" id="connectionsId">
+    <option th:each="connection : ${connections}"  
+    		th:value="${connection.id}"
     		th:text="${connection.firstName}"
     		></option>
   </select>
   </br>
-<!--  <input class="button buttonBlue" type="submit" value="Add"/>-->
-    
+<!--  <input class="button buttonBlue" th:href="@{/addConnection(firstName = 'default')}" 
+type="submit" value="Add"/>
+     
+     th:value="@{/addConnection(firstName = 'd')}"
+     th:selected="${connection.firstName}"
+     
     <a class="button buttonBlue" 
-  		th:href="@{/addConnection(firstName=${connection.firstName})}">Add connection</a>
+  		th:href="@{/addConnection(firstName = 'a')}">Add connection</a>
+-->
     		
-  <!--  <input class="button buttonBlue" type="submit" value="Add"
+    		<input class="button buttonBlue" type="submit" value="Add" />
+    		
+    		
+  <!--  
+   th:if="${not #lists.isEmpty(connections)}"
+    	th:selected=${connection.firstName}
+  
+  <div id="mainDiv" th:with="articles = ${ { articles[0], articles[1] } }">
+    <div th:each="article : ${articles}">
+        <a th:text="${article.name}" th:href="${article.url}"></a>
+    </div>
+</div>
+  
+  
+  
+  <input class="button buttonBlue" type="submit" value="Add"
     onclick="retrieveSelectedValueOfDropdown()"/> -->
-</form>
+ </form>
 <p id="demo"></p>
 <script>
 	function retrieveSelectedValueOfDropdown(){
