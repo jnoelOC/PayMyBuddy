@@ -15,11 +15,18 @@
 		</div>
 	</div>
 </div>
-
+<!-- 
+				<div th:if="${param.error}">    
+                    Invalid username and password.
+                </div>
+                <div th:if="${param.logout}"> 
+                    You have been logged out.
+                </div>
+ -->
 	<a th:href="@{/home}">
 			<button class="button buttonBlue">Home</button>
 		</a>
-<form action="/login" method="post" th:object="${useraccount}">
+<form th:action="@{/login}" method="post" th:object="${useraccount}">
 	<input type="text" th:name="${useraccount.login}">
 	<input type="text" th:name="${useraccount.psswrd}">
 	<input type="submit" name="Login">

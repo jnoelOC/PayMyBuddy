@@ -24,9 +24,9 @@ public class HomeController {
 	private UserAccountService userAccountService;
 
 	@GetMapping({ "/", "/index" })
-	public String index(Model model) {
-		model.addAttribute("name", "John"); // set 'John' value for 'name' attribute
-		return "index"; // name of the View
+	public String index() {
+
+		return "index";
 	}
 
 	@GetMapping({ "/home" })
@@ -75,8 +75,7 @@ public class HomeController {
 	}
 
 	@PostMapping({ "/login" })
-	public String login(Model model) { // @ModelAttribute UserAccount userAccount) {
-		model.addAttribute("name", "John");
+	public String login() {
 		return "login_page";
 	}
 
@@ -105,32 +104,7 @@ public class HomeController {
 		// Ajouter une connexion à la liste des connexions du sender
 		UserAccount ua = userAccountService.addConxUserAccount(sender, choiceOfConx);
 
-//		// recuperer la liste des conx du sender
-//		List<UserAccount> luaSender = userAccountService.retrieveConxUserAccount(sender);
-//
-//
-//		List<String> connections = new ArrayList<>();
-//		// recuperer le premier useraccount avec firstName==choiceOfConnection
-//		List<UserAccount> luaFirstname = userAccountService.findAllUserAccounts();
-//		for (UserAccount ua : luaFirstname) {
-//			if (ua.getFirstName().equals(choiceOfConnection)) {
-//				// copier le choiceOfConnection dans liste des connections de transfer_page.html
-//				connections.add(ua.getFirstName());
-//				break;
-//			}
-//		}
-
 		return "redirect:/transfer";
-//		return "addConnection_page";
 	}
 
-	@GetMapping({ "/user" })
-	public String user() {
-		return "<h1>Welcome user</h1>";
-	}
-
-	@GetMapping({ "/admin" })
-	public String admin() {
-		return "<h1>Welcome administrator</h1>";
-	}
 }
