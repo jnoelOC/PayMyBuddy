@@ -4,28 +4,29 @@
     <meta charset="UTF-8"/>
     <title>Pay my buddy Application</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home_style.css}" />
+     <link rel="stylesheet" type="text/css" th:href="@{/css/transfer_style.css}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
-<a th:href="@{/index}">
-	<button class="button buttonBlue">Pay my buddy</button>
-</a>
-<h3 style="text-align:center">Enter your information :</h3>
-<form style="text-align:center;white-space:pre" action="/register" method="get">
- <!--  th:object="${useraccount}">
-	<input type="text" th:name="${useraccount.firstname}">
-	<input type="text" th:name="${useraccount.lastname}"> -->
+<div th:replace="/header_fragment :: #my_template_logo"></div>
+
+<div class="w3-container">
+<div class="w3-display-container" style="height:400px">
+		<div class="center w3-display-middle">
+<h3>Enter your information :</h3>
+<form name='g' th:action="@{/register}" method="POST">
 	<label for="fname">FirstName</label>
-	<input type="text" id="fname" name="fname"></br>
+	<input type="text" th:value="${firstName}" id="firstName" name="firstName">
 	<label for="lname">LastName</label>
-	<input type="text" id="lname" name="lname"> </br>
+	<input type="text" th:value="${lastName}" id="lastName" name="lastName"></br></br>
 	<label for="login">Login</label>
- 	<input type="text" id="login" name="login"></br>
+ 	<input type="text" th:value="${loginMail}" id="loginMail" name="loginMail">
  	<label for="password">Password</label>
-	<input type="text" id="password" name="password"></br></br>
-	<input class="button buttonBlue" type="submit" value="Register" name="Register">
-	<!--  th:href="@{/transfer}"> -->
+	<input type="text" th:value="${psswrd}" id="psswrd" name="psswrd"></br></br>
+ 	<input class="button buttonBlue" type="submit" value="Register" name="registration">
 </form>
+</div></div></div>
 </body>
 </html>

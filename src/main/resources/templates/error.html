@@ -2,27 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">    
     <title>Pay my buddy Application</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/home_style.css}" />
      <link rel="stylesheet" type="text/css" th:href="@{/css/transfer_style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
-<div class="w3-container">
-	<div class="w3-display-container" style="height:400px">
-		<div class="center w3-display-middle">
-		<button class="button buttonGreen">PAY MY BUDDY</button>
-		</br></br>
-		<a th:href="@{/login}">
-			<button class="button buttonBlue">Login</button>
-		</a>
-		<a th:href="@{/register}">
-			<button class="button buttonBlue">Register</button>
-		</a>
-		</div>
-	</div>
-</div>
+<div th:replace="/header_fragment :: #my_template_logo"></div>
+<div style="text-align:center;">
+
+<h1>Something went wrong! </h1>
+<h1>Our Engineers are on it</h1></br>
+<h2>Or you have just entered a bad username and/or password</h2></br>
+
+<a href="/index"><button class="button buttonBlue">Go Home</button></a>
+<div>
+
 </body>
 </html>

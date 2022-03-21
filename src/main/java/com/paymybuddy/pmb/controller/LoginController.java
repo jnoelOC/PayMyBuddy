@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
 //	@RequestMapping({ "/", "/index", "/home" })
-	@RequestMapping("/*")
-	@RolesAllowed("USER")
-	public String getUser() {
-		return "Welcome, user";
-	}
+	// @RequestMapping("/*")
+	// @RolesAllowed("USER")
+	// public String getUser() {
+	// return "Welcome, user";
+	// }
 
 	@RequestMapping("/admin")
 	@RolesAllowed("ADMIN")

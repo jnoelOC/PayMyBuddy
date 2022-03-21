@@ -13,15 +13,6 @@
 <body>
 <div th:replace="/header_fragment :: #my_template_logo"></div>
 <div th:replace="/nav_fragment :: #my_template_nav"></div>
-<!-- 
-<a th:href="@{/transfer}">
-	<button class="button buttonBlue">Return to transfer</button>
-</a> -->  
-
-<!--
-<a class="button buttonBlue" onclick="return confirm('Are you sure Add connection ?')"
-  th:href="@{/addConnection(idContact=${connection.id})}">Add conx</a>
--->  
 
 <h3 style="text-align:center">Choose your connection :</h3>
 <form th:action="@{/addConnection}" style="text-align:center;white-space:pre" method="post">
@@ -33,42 +24,13 @@
     		></option>
   </select>
   </br>
-<!--  <input class="button buttonBlue" th:href="@{/addConnection(firstName = 'default')}" 
-type="submit" value="Add"/>
-     
-     th:value="@{/addConnection(firstName = 'd')}"
-     th:selected="${connection.firstName}"
-     
-    <a class="button buttonBlue" 
-  		th:href="@{/addConnection(firstName = 'a')}">Add connection</a>
--->
-    		
-    		<input class="button buttonBlue" type="submit" value="Add" />
-    		
+  <input class="button buttonBlue" type="submit" value="Add" />
     		
   <!--  
    th:if="${not #lists.isEmpty(connections)}"
     	th:selected=${connection.firstName}
-  
-  <div id="mainDiv" th:with="articles = ${ { articles[0], articles[1] } }">
-    <div th:each="article : ${articles}">
-        <a th:text="${article.name}" th:href="${article.url}"></a>
-    </div>
-</div>
-  
-  
-  
-  <input class="button buttonBlue" type="submit" value="Add"
-    onclick="retrieveSelectedValueOfDropdown()"/> -->
+-->
  </form>
-<p id="demo"></p>
-<script>
-	function retrieveSelectedValueOfDropdown(){
-		 var selectedValue = document.getElementById("connectionsId").value;
-		 alert("The name of your selected friend is: " + selectedValue );
-		 return selectedValue;
-	}
-</script>
 
 </body>
 </html>

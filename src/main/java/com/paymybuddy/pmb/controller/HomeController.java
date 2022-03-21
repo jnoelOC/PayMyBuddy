@@ -70,18 +70,41 @@ public class HomeController {
 	}
 
 	@GetMapping({ "/transfer" })
-	public String transfer(Model model) {
+	public String transfer() {
 		return "transfer_page";
 	}
 
-	@PostMapping({ "/login" })
+	@GetMapping({ "/login" })
+//	@RolesAllowed("USER")
 	public String login() {
 		return "login_page";
 	}
 
+	@GetMapping({ "/logout" })
+	public String logout() {
+		return "index";
+	}
+
 	@GetMapping({ "/register" })
-	public String register(Model model) {
+	public String register() {
 		return "register_page";
+	}
+
+	@PostMapping({ "/register" })
+	public String registerUserAccount(
+			@RequestParam(value = "firstName", name = "firstName", required = false) String firstName,
+			@RequestParam(value = "lastName", name = "lastName", required = false) String lastName,
+			@RequestParam(value = "loginMail", name = "loginMail", required = false) String loginMail,
+			@RequestParam(value = "psswrd", name = "psswrd", required = false) String psswrd) {
+//			@RequestParam(value = "registration", name = "registration", required = false) UserAccount registration) {
+//			@ModelAttribute("userAccount") UserAccount registration) {
+		Integer solde = 0;
+		UserAccount registration = new UserAccount(null, loginMail, psswrd, firstName, lastName, solde);
+
+		userAccountService.saveUserAccount(registration);
+
+//		return "redirect:/register_page?success";
+		return "redirect:/transfer";
 	}
 
 	@GetMapping("/addConnection")
