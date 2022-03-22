@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
@@ -91,19 +92,19 @@ public class HomeController {
 	}
 
 	@PostMapping({ "/register" })
-	public String registerUserAccount(
+	public String registerUserAccount(RedirectAttributes redirectAttributes,
 			@RequestParam(value = "firstName", name = "firstName", required = false) String firstName,
 			@RequestParam(value = "lastName", name = "lastName", required = false) String lastName,
 			@RequestParam(value = "loginMail", name = "loginMail", required = false) String loginMail,
 			@RequestParam(value = "psswrd", name = "psswrd", required = false) String psswrd) {
-//			@RequestParam(value = "registration", name = "registration", required = false) UserAccount registration) {
-//			@ModelAttribute("userAccount") UserAccount registration) {
-		Integer solde = 0;
-		UserAccount registration = new UserAccount(null, loginMail, psswrd, firstName, lastName, solde);
 
-		userAccountService.saveUserAccount(registration);
+		UserAccount registration = new UserAccount(null, loginMail, psswrd, firstName, lastName, 0);
 
-//		return "redirect:/register_page?success";
+		UserAccount ua = userAccountService.saveUserAccount(registration);
+
+		if (ua == null) {
+			redirectAttributes.addAttribute("attribute", "index");
+		}
 		return "redirect:/transfer";
 	}
 

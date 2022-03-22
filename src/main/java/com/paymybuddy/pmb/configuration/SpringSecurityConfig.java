@@ -22,22 +22,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-//		.userDetailsService(userDetailsService).password(passwordEncoder())
-				.inMemoryAuthentication().withUser("springuser").password(passwordEncoder().encode("spring"))
-				.roles("User").and().withUser("springadmin").password(passwordEncoder().encode("admin"))
-				.roles("ADMIN", "USER");
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+//		auth.inMemoryAuthentication().withUser("springuser").password(passwordEncoder().encode("spring")).roles("User")
+//				.and().withUser("springadmin").password(passwordEncoder().encode("admin")).roles("ADMIN", "USER");
 	}
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/register").permitAll();
 		http.authorizeRequests().antMatchers("/resources/static/css/*.css", "/resources/**").permitAll();
 		http.authorizeRequests().antMatchers("/admin").hasRole("ADMIN").antMatchers("/user").hasRole("USER")
 				.anyRequest().authenticated();
 		http.formLogin().loginPage("/index").permitAll().loginProcessingUrl("/login").defaultSuccessUrl("/home", true)
 				.failureUrl("/login_page.html");
 		http.logout().logoutUrl("/index").invalidateHttpSession(true).deleteCookies("JSESSIONID");
-
 	}
 
 	@Override
@@ -49,4 +47,5 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 }

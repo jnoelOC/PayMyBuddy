@@ -23,14 +23,12 @@ public class MyUserPrincipal implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return userAccount.getPsswrd();
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return null;
+		return userAccount.getLoginMail();
 	}
 
 	@Override

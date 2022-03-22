@@ -12,6 +12,10 @@ import com.paymybuddy.pmb.model.UserAccount;
 @Repository
 public interface IUserAccountRepository extends JpaRepository<UserAccount, Long> {
 
+	UserAccount findByLoginMail(String loginMail);
+
+	Boolean existsByLoginMail(String loginMail);
+
 	// pour des requetes perso
 	// @Query
 	// public BankAccount getUserByIban(String iban);

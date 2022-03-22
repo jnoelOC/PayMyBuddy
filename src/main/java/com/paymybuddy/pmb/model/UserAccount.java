@@ -28,7 +28,7 @@ public class UserAccount {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, unique = true)
 	private Long id;
-	@Column(name = "LOGIN_MAIL", length = 50)
+	@Column(name = "LOGIN_MAIL", length = 50, unique = true)
 	private String loginMail;
 	@Column(name = "PSSWRD", length = 50)
 	private String psswrd;

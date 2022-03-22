@@ -35,6 +35,12 @@ public class UserAccountService implements IUserAccountService {
 
 	@Transactional
 	public UserAccount saveUserAccount(UserAccount userAccount) {
+
+		// si loginMail existe Alors retourner null
+		if (Boolean.TRUE.equals(userAccountRepository.existsByLoginMail(userAccount.getLoginMail()))) {
+			return null;
+		}
+		// Si userAccount n'existe pas Alors le sauvegarder en BDD
 		return userAccountRepository.save(userAccount);
 	}
 
