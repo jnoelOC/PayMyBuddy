@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,9 @@ import com.paymybuddy.pmb.repository.IUserAccountRepository;
 public class UserAccountService implements IUserAccountService {
 
 	public static final Logger logger = LogManager.getLogger(UserAccountService.class);
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private IUserAccountRepository userAccountRepository;
@@ -124,4 +128,17 @@ public class UserAccountService implements IUserAccountService {
 		userAccountRepository.delete(userAccount);
 	}
 
+	public UserAccount registerNewUserAccount(Long id, String loginMail, String psswrd, String firstName,
+			String lastName, Integer sold) throws EmailExistsException {
+
+		Boolean mailExists = userAccountRepository.existsByLoginMail(loginMail);
+
+		if (Boolean.TRUE.equals(mailExists)) {
+			throw new EmailExistsException("There is an account with that email adress: " + loginMail);
+		}
+		UserAccount registration = new UserAccount(null, loginMail, passwordEncoder.encode(psswrd), firstName, lastName,
+				sold);
+
+		return userAccountRepository.save(registration);
+	}
 }

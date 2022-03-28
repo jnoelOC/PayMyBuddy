@@ -17,4 +17,7 @@ public interface IUserAccountService {
 	public Transac transferMoneyUserAccount(UserAccount sender);
 
 	public void deleteUserAccount(UserAccount userAccount);
+
+	public UserAccount registerNewUserAccount(Long id, String loginMail, String psswrd, String firstName,
+			String lastName, Integer sold) throws EmailExistsException;
 }

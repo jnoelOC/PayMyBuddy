@@ -18,11 +18,11 @@ import com.paymybuddy.pmb.service.MyUserDetailsService;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private MyUserDetailsService userDetailsService;
+	private MyUserDetailsService uds;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(uds).passwordEncoder(passwordEncoder());
 //		auth.inMemoryAuthentication().withUser("springuser").password(passwordEncoder().encode("spring")).roles("User")
 //				.and().withUser("springadmin").password(passwordEncoder().encode("admin")).roles("ADMIN", "USER");
 	}

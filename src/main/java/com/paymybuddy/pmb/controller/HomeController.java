@@ -96,14 +96,17 @@ public class HomeController {
 			@RequestParam(value = "firstName", name = "firstName", required = false) String firstName,
 			@RequestParam(value = "lastName", name = "lastName", required = false) String lastName,
 			@RequestParam(value = "loginMail", name = "loginMail", required = false) String loginMail,
-			@RequestParam(value = "psswrd", name = "psswrd", required = false) String psswrd) {
+			@RequestParam(value = "psswrd", name = "psswrd", required = false) String psswrd) throws Exception {
 
-		UserAccount registration = new UserAccount(null, loginMail, psswrd, firstName, lastName, 0);
+		try {
+			UserAccount registration = userAccountService.registerNewUserAccount(null, loginMail, psswrd, firstName,
+					lastName, 0);
 
-		UserAccount ua = userAccountService.saveUserAccount(registration);
-
-		if (ua == null) {
-			redirectAttributes.addAttribute("attribute", "index");
+			if (registration == null) {
+				redirectAttributes.addAttribute("attribute", "index");
+			}
+		} catch (Exception ex) {
+			System.out.println("Duplicated user (by email) : " + ex.getMessage());
 		}
 		return "redirect:/transfer";
 	}
