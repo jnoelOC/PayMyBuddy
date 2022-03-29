@@ -1,10 +1,14 @@
 package com.paymybuddy.pmb.controller;
 
+import java.security.Principal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,18 +25,28 @@ import com.paymybuddy.pmb.service.UserAccountService;
 @Controller
 public class HomeController {
 
+	public static final Logger logger = LogManager.getLogger(HomeController.class);
+
 	@Autowired
 	private UserAccountService userAccountService;
 
 	@GetMapping({ "/", "/index" })
-	public String index() {
+	public String mainIndex() {
 
 		return "index";
 	}
 
 	@GetMapping({ "/home" })
-	public String home(Model model) {
+	public String home(RedirectAttributes redirectAttributes, Model model, Principal principal) {
+		System.out.println("TOOOOOOOOOOOOOOOOOOTOOOOOOO " + principal.getName());
+		UserAccount user = userAccountService.findByLoginMail(principal.getName());
+		// creer un attribut
+		model.addAttribute("user", user);
+		// rediriger l'attribut
+		redirectAttributes.addAttribute("userAttrib", "user");
+
 		return "home_page";
+//		return "redirect:home_page";
 	}
 
 	@ModelAttribute("transacs")
@@ -56,13 +70,20 @@ public class HomeController {
 		return connections;
 	}
 
+//	@GetMapping({ "/transfer" })
 	@ModelAttribute("userconnections")
-	public List<String> getConnectionsOfOneUser() {
+	public List<String> getConnectionsOfOneUser(RedirectAttributes redirectAttributes, Principal principal) {
 
-		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
+		List<UserAccount> lua = null;
+		try {
+			System.out.println("TOOOOOOOOOOOOOOOOOOTOOOOOOOpopopo " + principal.getName());
+//			UserAccount sender = (UserAccount) redirectAttributes.getAttribute("userAttrib");
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
 
-		List<UserAccount> lua = userAccountService.retrieveConxUserAccount(sender);
-
+			lua = userAccountService.retrieveConxUserAccount(sender);
+		} catch (Exception e) {
+			logger.error("Erreur dans getConnectionsOfOneUser : " + e.getMessage());
+		}
 		List<String> connections = new ArrayList<>();
 		for (UserAccount usac : lua) {
 			connections.add(usac.getFirstName());
@@ -70,8 +91,42 @@ public class HomeController {
 		return connections;
 	}
 
+//	@ModelAttribute("userconnections")
+//	public List<String> getConnectionsOfOneUser() {
+//		
+//		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
+//
+//		List<UserAccount> lua = userAccountService.retrieveConxUserAccount(sender);
+//		
+//		List<String> connections = new ArrayList<>();
+//		for (UserAccount usac : lua) {
+//			connections.add(usac.getFirstName());
+//		}
+//		return connections;
+//	}
+
 	@GetMapping({ "/transfer" })
-	public String transfer() {
+	public String transferGet() {
+
+		try {
+
+		} catch (Exception e) {
+			logger.error("Erreur dans transfer money : " + e.getMessage());
+		}
+		return "transfer_page";
+	}
+
+	@PostMapping({ "/transfer" })
+	public String transferPost(
+			@RequestParam(value = "userconnections", name = "userconnections", required = false) Long idConnection,
+			@RequestParam(value = "description", name = "description", required = false) String description,
+			@RequestParam(value = "amount", name = "amount", required = false) Integer amount) {
+
+		try {
+			Transac trx = userAccountService.transferMoneyUserAccount(idConnection, description, amount);
+		} catch (SQLException e) {
+			logger.error("Erreur dans transferPost : " + e.getMessage());
+		}
 		return "transfer_page";
 	}
 
@@ -123,14 +178,18 @@ public class HomeController {
 	@PostMapping("/addConnection")
 	public String addConnectionPost(
 			@RequestParam(value = "connection", name = "connection", required = false) Long connection) {
+		try {
+			// recuperer le choix de l'utilisateur
+			Long choiceOfConx = connection;
+			// recuperer le sender
+			UserAccount sender = userAccountService.getById(connection);
+//			UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
+			// Ajouter une connexion à la liste des connexions du sender
+			UserAccount ua = userAccountService.addConxUserAccount(sender, choiceOfConx);
 
-		// recuperer le choix de l'utilisateur
-		Long choiceOfConx = connection;
-		// recuperer en param le sender
-		UserAccount sender = new UserAccount(3L, "jn@gmail.com", "jn", "jnoel", "chambe", 120);
-		// Ajouter une connexion à la liste des connexions du sender
-		UserAccount ua = userAccountService.addConxUserAccount(sender, choiceOfConx);
-
+		} catch (Exception ex) {
+			System.out.println("Error dans AddConnectionPost : " + ex.getMessage());
+		}
 		return "redirect:/transfer";
 	}
 

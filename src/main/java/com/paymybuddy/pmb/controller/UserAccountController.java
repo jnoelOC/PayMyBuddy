@@ -71,9 +71,14 @@ public class UserAccountController {
 	@PostMapping("/useraccount/pay")
 	public ResponseEntity<Transac> transferMoney(@RequestBody UserAccount userAccount) {
 
-		Transac trx = userAccountService.transferMoneyUserAccount(userAccount);
+		Transac trx = null;
+//		try {
+//			trx = userAccountService.transferMoneyUserAccount(userAccount);
+//		} catch (SQLException e) {
+//			logger.error("Erreur SQL dans transfer money : " + e.getMessage());
+//		}
 
-		if (trx.getIdTransaction() <= 0) {
+		if ((trx == null) || (trx.getIdTransaction() <= 0)) {
 			logger.error("Erreur dans transfer money : status No PK.");
 			return new ResponseEntity<>(trx, HttpStatus.NOT_FOUND);
 		}

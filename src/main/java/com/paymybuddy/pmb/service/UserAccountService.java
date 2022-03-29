@@ -1,5 +1,6 @@
 package com.paymybuddy.pmb.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,14 @@ public class UserAccountService implements IUserAccountService {
 
 	public List<UserAccount> findAllUserAccounts() {
 		return userAccountRepository.findAll();
+	}
+
+	public UserAccount findByLoginMail(String user) {
+		return userAccountRepository.findByLoginMail(user);
+	}
+
+	public UserAccount getById(Long id) {
+		return userAccountRepository.getById(id);
 	}
 
 	@Transactional
@@ -98,16 +107,20 @@ public class UserAccountService implements IUserAccountService {
 		return connections;
 	}
 
-	@Transactional
-	public Transac transferMoneyUserAccount(UserAccount sender) {
+	@Transactional(rollbackFor = { SQLException.class })
+	public Transac transferMoneyUserAccount(Long idConnection, String description, Integer amount) throws SQLException {
+
+		// chercher le sender avec le id parmi tous les useraccount
+		UserAccount sender = userAccountRepository.getById(idConnection);
+
+		// chercher les connexions du sender
 		List<UserAccount> listOfUserAccount = sender.getConnections();
 		UserAccount receiver = listOfUserAccount.get(0);
 
 		Transac transac = new Transac(null, "description", 0, "senderMail", "receiverMail");
-		Integer amount = 5;
 		Integer soldeRec = 0;
 		Integer soldeSen = 0;
-		String description = "musée";
+
 		transac.setDescription(description);
 		transac.setGiver(sender.getLoginMail());
 		transac.setReceiver(receiver.getLoginMail());
@@ -117,8 +130,13 @@ public class UserAccountService implements IUserAccountService {
 		userAccountRepository.save(receiver);
 
 		soldeSen = sender.getSolde() - amount;
-		sender.setSolde(soldeSen);
-		userAccountRepository.save(sender);
+		if (soldeSen > 0) {
+			sender.setSolde(soldeSen);
+			userAccountRepository.save(sender);
+
+		} else {
+			throw new SQLException("Throwing exception for 'saving' rollback");
+		}
 
 		return transacRepository.save(transac);
 	}

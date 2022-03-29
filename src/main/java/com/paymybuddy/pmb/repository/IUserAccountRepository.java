@@ -20,7 +20,7 @@ public interface IUserAccountRepository extends JpaRepository<UserAccount, Long>
 	// @Query
 	// public BankAccount getUserByIban(String iban);
 
-//	List<UserAccount> findByIdPK(Long idPK);
+	UserAccount getById(Long id);
 //	List<UserAccount> findByLoginMail(String loginMail);
 
 //	@Query(nativeQuery = true, value = "SELECT * FROM connection c, useraccount u WHERE :x = c.id_ua_pk")
