@@ -42,7 +42,7 @@
     	<th>Friend</th> <th>Description</th> <th>Amount</th>
     </tr>
   <tr th:each="transac:${transacs}">
-  	<td th:text="friend"></td> 
+  	<td th:text="${transac.receiver}"></td> 
     <td th:text="${transac.description}"></td>
     <td th:text="${transac.amount}"></td> 
   </tr> 

@@ -1,6 +1,7 @@
 package com.paymybuddy.pmb.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,8 @@ import com.paymybuddy.pmb.model.UserAccount;
 public interface IUserAccountRepository extends JpaRepository<UserAccount, Long> {
 
 	UserAccount findByLoginMail(String loginMail);
+
+	Optional<UserAccount> findById(Long id);
 
 	Boolean existsByLoginMail(String loginMail);
 

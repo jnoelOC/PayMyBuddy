@@ -46,6 +46,10 @@ public class UserAccountService implements IUserAccountService {
 		return userAccountRepository.getById(id);
 	}
 
+	public Optional<UserAccount> findById(Long id) {
+		return userAccountRepository.findById(id);
+	}
+
 	@Transactional
 	public UserAccount saveUserAccount(UserAccount userAccount) {
 
@@ -61,23 +65,26 @@ public class UserAccountService implements IUserAccountService {
 	public UserAccount addConxUserAccount(UserAccount sender, Long idOfReceiver) {
 
 		List<UserAccount> connections = new ArrayList<>();
-
-		// remplir la liste des connexions du sender
-		List<UserAccount> luaOfSender = retrieveConxUserAccount(sender);
-		for (UserAccount ua : luaOfSender) {
-			connections.add(ua);
-		}
-
-		// Trouver le receiver par son id
-		List<UserAccount> lua = findAllUserAccounts();
-		for (UserAccount uaReceiver : lua) {
-			if (uaReceiver.getId().equals(idOfReceiver)) {
-				connections.add(uaReceiver);
-				break;
+		try {
+			// remplir la liste des connexions du sender
+			List<UserAccount> luaOfSender = retrieveConxUserAccount(sender);
+			for (UserAccount ua : luaOfSender) {
+				connections.add(ua);
 			}
-		}
 
-		sender.setConnections(connections);
+			// Trouver le receiver par son id
+			List<UserAccount> lua = findAllUserAccounts();
+			for (UserAccount uaReceiver : lua) {
+				if (uaReceiver.getId().equals(idOfReceiver)) {
+					connections.add(uaReceiver);
+					break;
+				}
+			}
+			sender.setConnections(connections);
+
+		} catch (Exception ex) {
+			logger.error("Error dans addConxUserAccount : %s ", ex.getMessage());
+		}
 		return userAccountRepository.save(sender);
 	}
 
@@ -98,8 +105,6 @@ public class UserAccountService implements IUserAccountService {
 
 			Optional<UserAccount> ua = userAccountRepository.findById(lng);
 			if (ua.isPresent()) {
-
-				// connections = ua.stream().collect(Collectors.toList());
 				connections.addAll(ua.stream().collect(Collectors.toList()));
 			}
 		}
@@ -108,14 +113,16 @@ public class UserAccountService implements IUserAccountService {
 	}
 
 	@Transactional(rollbackFor = { SQLException.class })
-	public Transac transferMoneyUserAccount(Long idConnection, String description, Integer amount) throws SQLException {
+	public Transac transferMoneyUserAccount(String loginMail, Long idReceiverConnection, String description,
+			Integer amount) throws SQLException {
 
 		// chercher le sender avec le id parmi tous les useraccount
-		UserAccount sender = userAccountRepository.getById(idConnection);
+		UserAccount sender = userAccountRepository.findByLoginMail(loginMail);
 
 		// chercher les connexions du sender
 		List<UserAccount> listOfUserAccount = sender.getConnections();
 		UserAccount receiver = listOfUserAccount.get(0);
+//		UserAccount receiver = userAccountRepository.findById(idReceiverConnection)
 
 		Transac transac = new Transac(null, "description", 0, "senderMail", "receiverMail");
 		Integer soldeRec = 0;

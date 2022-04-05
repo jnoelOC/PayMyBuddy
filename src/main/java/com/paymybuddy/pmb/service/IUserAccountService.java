@@ -2,6 +2,7 @@ package com.paymybuddy.pmb.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
@@ -11,6 +12,8 @@ public interface IUserAccountService {
 
 	public UserAccount getById(Long id);
 
+	public Optional<UserAccount> findById(Long id);
+
 	public UserAccount findByLoginMail(String user);
 
 	public UserAccount saveUserAccount(UserAccount userAccount);
@@ -19,7 +22,8 @@ public interface IUserAccountService {
 
 	public List<UserAccount> retrieveConxUserAccount(UserAccount sender);
 
-	public Transac transferMoneyUserAccount(Long idConnection, String description, Integer amount) throws SQLException;
+	public Transac transferMoneyUserAccount(String loginMail, Long idReceiverConnection, String description,
+			Integer amount) throws SQLException;
 
 	public void deleteUserAccount(UserAccount userAccount);
 
