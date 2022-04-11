@@ -1,5 +1,6 @@
 package com.paymybuddy.pmb.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,17 @@ public class TransacService {
 
 	public List<Transac> findAllTransactions() {
 		return transacRepository.findAll();
+	}
+
+	public List<Transac> findAllTransactionsByGiver(String user) {
+		List<Transac> allTrxOfGiver = new ArrayList<>();
+		List<Transac> allTrx = transacRepository.findAll();
+		for (Transac trx : allTrx) {
+			if (trx.getGiver().equalsIgnoreCase(user)) {
+				allTrxOfGiver.add(trx);
+			}
+		}
+		return allTrxOfGiver;
 	}
 
 	@Transactional

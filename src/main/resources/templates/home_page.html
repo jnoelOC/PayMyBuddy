@@ -11,8 +11,8 @@
 <body>
 <div th:replace="/header_fragment :: #my_template_logo"></div>
 <div th:replace="/nav_fragment :: #my_template_nav"></div>
-
-<h3 style="text-align:center">Welcome, <span th:text="${#authentication.getPrincipal().getUsername()}"></span>, to transfer money to your friends !</h3>
-
+<div class="container-fluid">
+<h3 style="text-align:center">Welcome, <strong><span th:text="${#authentication.getPrincipal().getUsername()}"></span></strong>, to transfer money to your friends !</h3>
+</div>
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.paymybuddy.pmb.controller;
 
 import java.security.Principal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
+import com.paymybuddy.pmb.service.TransacService;
 import com.paymybuddy.pmb.service.UserAccountService;
 
 @Controller
@@ -30,6 +30,9 @@ public class HomeController {
 
 	@Autowired
 	private UserAccountService userAccountService;
+
+	@Autowired
+	private TransacService transacService;
 
 	@GetMapping({ "/", "/index" })
 	public String mainIndex() {
@@ -46,16 +49,6 @@ public class HomeController {
 		return "home_page";
 	}
 
-	@ModelAttribute("transacs")
-	public List<Transac> getTransacs() {
-		List<Transac> transacs = new ArrayList<>();
-		transacs.add(new Transac(1L, "restau", 100, "jn@gmail.com", "cs@gmail.com"));
-		transacs.add(new Transac(2L, "cinema", 40, "jn@gmail.com", "a@gmail.com"));
-		transacs.add(new Transac(3L, "theatre", 120, "jn@gmail.com", "c@gmail.com"));
-		transacs.add(new Transac(4L, "co-voiturage", 20, "jn@gmail.com", "a@gmail.com"));
-		return transacs;
-	}
-
 	@Order(1)
 	@ModelAttribute("connections")
 	public Set<String> getAllConnections() {
@@ -68,7 +61,7 @@ public class HomeController {
 		return connections;
 	}
 
-	@Order(5)
+	@Order(4)
 	@ModelAttribute("userconnections")
 	public List<String> getConnectionsOfOneUser(Model model, RedirectAttributes redirectAttributes,
 			Principal principal) {
@@ -92,6 +85,14 @@ public class HomeController {
 		return connections;
 	}
 
+	@Order(5)
+	@ModelAttribute("transacs")
+	public List<Transac> getTransacs(Principal principal) {
+
+		return transacService.findAllTransactionsByGiver("j@gmail.com"); // principal.getName());
+
+	}
+
 	@Order(6)
 	@GetMapping({ "/transfer" })
 	public String transferGet() {
@@ -106,15 +107,14 @@ public class HomeController {
 
 	@PostMapping({ "/transfer" })
 	public String transferPost(Principal principal,
-			@RequestParam(value = "userconnections", name = "userconnections", required = false) Long idReceiverConnection,
+			@RequestParam(value = "userconnections", name = "userconnections", required = false) String idReceiverConnection,
 			@RequestParam(value = "description", name = "description", required = false) String description,
 			@RequestParam(value = "amount", name = "amount", required = false) Integer amount) {
 
 		try {
-			System.out.println("TOOOOOOOOTOOOOOOOtransferPost " + principal.getName());
-			Transac trx = userAccountService.transferMoneyUserAccount(principal.getName(), idReceiverConnection,
+			Transac transac = userAccountService.transferMoneyUserAccount(principal.getName(), idReceiverConnection,
 					description, amount);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.error("Erreur dans transferPost : %s ", e.getMessage());
 		}
 		return "transfer_page";
@@ -151,7 +151,7 @@ public class HomeController {
 				redirectAttributes.addAttribute("attribute", "index");
 			}
 		} catch (Exception ex) {
-			System.out.println("Duplicated user (by email) : " + ex.getMessage());
+			System.out.println("Duplicated user : " + ex.getMessage());
 		}
 		return "redirect:/transfer";
 	}

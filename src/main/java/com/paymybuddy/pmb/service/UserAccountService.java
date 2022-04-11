@@ -113,16 +113,14 @@ public class UserAccountService implements IUserAccountService {
 	}
 
 	@Transactional(rollbackFor = { SQLException.class })
-	public Transac transferMoneyUserAccount(String loginMail, Long idReceiverConnection, String description,
-			Integer amount) throws SQLException {
+	public Transac transferMoneyUserAccount(String loginMail, String receiverMail, String description, Integer amount)
+			throws SQLException {
 
-		// chercher le sender avec le id parmi tous les useraccount
+		// chercher le sender avec le loginMail
 		UserAccount sender = userAccountRepository.findByLoginMail(loginMail);
 
-		// chercher les connexions du sender
-		List<UserAccount> listOfUserAccount = sender.getConnections();
-		UserAccount receiver = listOfUserAccount.get(0);
-//		UserAccount receiver = userAccountRepository.findById(idReceiverConnection)
+		// chercher le receiver avec le receiverMail
+		UserAccount receiver = userAccountRepository.findByLoginMail(receiverMail);
 
 		Transac transac = new Transac(null, "description", 0, "senderMail", "receiverMail");
 		Integer soldeRec = 0;
@@ -131,6 +129,7 @@ public class UserAccountService implements IUserAccountService {
 		transac.setDescription(description);
 		transac.setGiver(sender.getLoginMail());
 		transac.setReceiver(receiver.getLoginMail());
+		transac.setAmount(amount);
 
 		soldeRec = receiver.getSolde() + amount;
 		receiver.setSolde(soldeRec);

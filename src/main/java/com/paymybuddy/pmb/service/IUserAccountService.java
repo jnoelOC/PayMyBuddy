@@ -22,7 +22,7 @@ public interface IUserAccountService {
 
 	public List<UserAccount> retrieveConxUserAccount(UserAccount sender);
 
-	public Transac transferMoneyUserAccount(String loginMail, Long idReceiverConnection, String description,
+	public Transac transferMoneyUserAccount(String loginMail, String receiverConnection, String description,
 			Integer amount) throws SQLException;
 
 	public void deleteUserAccount(UserAccount userAccount);
