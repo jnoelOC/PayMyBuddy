@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,12 +86,10 @@ public class HomeController {
 		return connections;
 	}
 
-	@Order(5)
 	@ModelAttribute("transacs")
-	public List<Transac> getTransacs(Principal principal) {
-
-		return transacService.findAllTransactionsByGiver("j@gmail.com"); // principal.getName());
-
+	public List<Transac> getTransacs() {
+		String emailUserConnected = SecurityContextHolder.getContext().getAuthentication().getName();
+		return transacService.findAllTransactionsByGiver(emailUserConnected);
 	}
 
 	@Order(6)
@@ -115,7 +114,7 @@ public class HomeController {
 			Transac transac = userAccountService.transferMoneyUserAccount(principal.getName(), idReceiverConnection,
 					description, amount);
 		} catch (Exception e) {
-			logger.error("Erreur dans transferPost : %s ", e.getMessage());
+			logger.error("Erreur dans transferPost : " + e.getMessage());
 		}
 		return "transfer_page";
 	}
@@ -168,14 +167,29 @@ public class HomeController {
 	@Order(8)
 	@PostMapping("/addConnection")
 	public String addConnectionPost(Principal principal,
-			@RequestParam(value = "connection", name = "connection", required = false) Long connection) {
+			@RequestParam(value = "connection", name = "connection", required = false) String connectionMail) {
 		try {
 			// recuperer le choix de l'utilisateur
-			Long choiceOfReceiverConx = connection;
+			UserAccount receiver = userAccountService.findByLoginMail(connectionMail);
 			// recuperer le sender
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
 			// Ajouter une connexion à la liste des connexions du sender
-			UserAccount ua = userAccountService.addConxUserAccount(sender, choiceOfReceiverConx);
+			UserAccount ua = userAccountService.addConxUserAccount(sender, receiver.getId());
+		} catch (Exception ex) {
+			logger.error("Error dans AddConnectionPost : %s ", ex.getMessage());
+		}
+		return "redirect:/transfer";
+	}
+
+	@Order(8)
+	@GetMapping("/deleteConnection")
+	public String deleteConnectionPost(Principal principal,
+			@RequestParam(value = "connectionMail", name = "connectionMail", required = false) String connectionMail) {
+		try {
+			// recuperer le sender
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
+			// Ajouter une connexion à la liste des connexions du sender
+			UserAccount ua = userAccountService.deleteConxUserAccount(sender, connectionMail);
 		} catch (Exception ex) {
 			logger.error("Error dans AddConnectionPost : %s ", ex.getMessage());
 		}

@@ -75,7 +75,7 @@ public class UserAccountService implements IUserAccountService {
 			// Trouver le receiver par son id
 			List<UserAccount> lua = findAllUserAccounts();
 			for (UserAccount uaReceiver : lua) {
-				if (uaReceiver.getId().equals(idOfReceiver)) {
+				if (uaReceiver.getId().equals(idOfReceiver) && !connections.contains(uaReceiver)) {
 					connections.add(uaReceiver);
 					break;
 				}
@@ -141,7 +141,7 @@ public class UserAccountService implements IUserAccountService {
 			userAccountRepository.save(sender);
 
 		} else {
-			throw new SQLException("Throwing exception for 'saving' rollback");
+			throw new SQLException("Throwing exception for 'saving' rollback. Sender's solde isn't enough.");
 		}
 
 		return transacRepository.save(transac);
@@ -150,6 +150,33 @@ public class UserAccountService implements IUserAccountService {
 	@Transactional
 	public void deleteUserAccount(UserAccount userAccount) {
 		userAccountRepository.delete(userAccount);
+	}
+
+	@Transactional
+	public UserAccount deleteConxUserAccount(UserAccount sender, String receiverMail) {
+
+		List<UserAccount> connections = new ArrayList<>();
+		try {
+			// remplir la liste des connexions du sender
+			List<UserAccount> luaOfSender = retrieveConxUserAccount(sender);
+			for (UserAccount ua : luaOfSender) {
+				connections.add(ua);
+			}
+
+			// Trouver le receiver par son mail
+			List<UserAccount> lua = findAllUserAccounts();
+			for (UserAccount uaReceiver : lua) {
+				if (uaReceiver.getLoginMail().equals(receiverMail)) {
+					connections.remove(uaReceiver);
+					break;
+				}
+			}
+			sender.setConnections(connections);
+
+		} catch (Exception ex) {
+			logger.error("Error dans addConxUserAccount : %s ", ex.getMessage());
+		}
+		return userAccountRepository.save(sender);
 	}
 
 	public UserAccount registerNewUserAccount(Long id, String loginMail, String psswrd, String firstName,
