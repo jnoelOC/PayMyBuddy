@@ -20,12 +20,10 @@
 <form th:action="@{/addConnection}" style="text-align:center;white-space:pre" method="post">
     <label for="connections"></label>
   <select class="form-select" aria-label="Default select" name="connection" id="connectionsId">
-  <option selected th:each="connection : ${userconnections}" 
-    		th:text="${connection}"
-    		th:value="${connection}"
+  <option selected th:each="connection : ${connections}" 
+    		th:text="${connection.loginMail}"
     		></option>
   </select>
-  
   </br>
   <input class="button buttonBlue" type="submit" value="Add" />
 </form>   		

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -120,7 +121,6 @@ public class HomeController {
 	}
 
 	@GetMapping({ "/login" })
-//	@RolesAllowed("USER")
 	public String login() {
 		return "login_page";
 	}
@@ -156,10 +156,26 @@ public class HomeController {
 	}
 
 	@GetMapping("/addConnection")
-	public String addConnectionGet(Model model) {
-		// populate list of all connections
-		List<UserAccount> lua = userAccountService.findAllUserAccounts();
-		model.addAttribute("connections", lua);
+	public String addConnectionGet(Principal principal, Model model) {
+		// récuperer la liste de tous les userAccount
+		List<UserAccount> all = userAccountService.findAllUserAccounts();
+		List<UserAccount> result = null;
+		try {
+			// 2) récupérer toutes les connexions de l'utilisateur connecté
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
+			List<String> connectionsSender = userAccountService.retrieveConxUserAccount(sender).stream()
+					.map(UserAccount::getLoginMail).collect(Collectors.toList());
+			// 3) rassembler connxOfSender et l'utilisateur connecté dans la même liste
+			connectionsSender.add(sender.getLoginMail());
+			// 4) enlever les userAccount de la liste connxOfSender de la liste all
+			List<String> allEmail = all.stream().map(UserAccount::getLoginMail).collect(Collectors.toList());
+			result = allEmail.stream().filter(emailUser -> !connectionsSender.contains(emailUser))
+					.map(emailUser -> userAccountService.findByLoginMail(emailUser)).collect(Collectors.toList());
+
+		} catch (Exception ex) {
+			logger.error("Error dans AddConnectionGet : %s ", ex.getMessage());
+		}
+		model.addAttribute("connections", result);
 
 		return "/addConnection_page";
 	}

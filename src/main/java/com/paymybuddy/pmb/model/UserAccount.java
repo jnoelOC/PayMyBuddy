@@ -30,7 +30,7 @@ public class UserAccount {
 	private Long id;
 	@Column(name = "LOGIN_MAIL", length = 50, unique = true)
 	private String loginMail;
-	@Column(name = "PSSWRD", length = 50)
+	@Column(name = "PSSWRD", length = 60)
 	private String psswrd;
 	@Column(name = "FIRSTNAME", length = 30)
 	private String firstName;
