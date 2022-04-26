@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.paymybuddy.pmb.model.BankAccount;
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
+import com.paymybuddy.pmb.service.BankAccountService;
 import com.paymybuddy.pmb.service.TransacService;
 import com.paymybuddy.pmb.service.UserAccountService;
 
@@ -34,6 +36,9 @@ public class HomeController {
 	private UserAccountService userAccountService;
 
 	@Autowired
+	private BankAccountService bankAccountService;
+
+	@Autowired
 	private TransacService transacService;
 
 	@GetMapping({ "/", "/index" })
@@ -44,9 +49,10 @@ public class HomeController {
 
 	@Order(3)
 	@GetMapping({ "/home" })
-	public String home(Principal principal) {
+	public String home(Principal principal, Model model) {
 
-//		UserAccount user = userAccountService.findByLoginMail(principal.getName());
+		UserAccount user = userAccountService.findByLoginMail(principal.getName());
+		model.addAttribute("sold", user.getSolde());
 
 		return "home_page";
 	}
@@ -161,13 +167,13 @@ public class HomeController {
 		List<UserAccount> all = userAccountService.findAllUserAccounts();
 		List<UserAccount> result = null;
 		try {
-			// 2) récupérer toutes les connexions de l'utilisateur connecté
+			// récupérer toutes les connexions de l'utilisateur connecté
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
 			List<String> connectionsSender = userAccountService.retrieveConxUserAccount(sender).stream()
 					.map(UserAccount::getLoginMail).collect(Collectors.toList());
-			// 3) rassembler connxOfSender et l'utilisateur connecté dans la même liste
+			// rassembler connxOfSender et l'utilisateur connecté dans la même liste
 			connectionsSender.add(sender.getLoginMail());
-			// 4) enlever les userAccount de la liste connxOfSender de la liste all
+			// enlever les userAccount de la liste connxOfSender de la liste all
 			List<String> allEmail = all.stream().map(UserAccount::getLoginMail).collect(Collectors.toList());
 			result = allEmail.stream().filter(emailUser -> !connectionsSender.contains(emailUser))
 					.map(emailUser -> userAccountService.findByLoginMail(emailUser)).collect(Collectors.toList());
@@ -199,17 +205,88 @@ public class HomeController {
 
 	@Order(8)
 	@GetMapping("/deleteConnection")
-	public String deleteConnectionPost(Principal principal,
+	public String deleteConnectionGet(Principal principal,
 			@RequestParam(value = "connectionMail", name = "connectionMail", required = false) String connectionMail) {
 		try {
 			// recuperer le sender
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
 			// Ajouter une connexion à la liste des connexions du sender
-			UserAccount ua = userAccountService.deleteConxUserAccount(sender, connectionMail);
+			userAccountService.deleteConxUserAccount(sender, connectionMail);
 		} catch (Exception ex) {
 			logger.error("Error dans AddConnectionPost : %s ", ex.getMessage());
 		}
 		return "redirect:/transfer";
+	}
+
+	@PostMapping("/addSold")
+	public String addSoldGet(Principal principal,
+			@RequestParam(value = "sold", name = "sold", required = false) Integer sold) {
+		try {
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
+			BankAccount bankAccount = bankAccountService.findByLoginMail(principal.getName());
+
+			bankAccountService.addSold(bankAccount, sender, sold);
+
+		} catch (Exception ex) {
+			logger.error("Error dans addSoldGet : %s ", ex.getMessage());
+		}
+		return "redirect:/transfer";
+	}
+
+	@PostMapping("/substractSold")
+	public String substractSoldGet(Principal principal,
+			@RequestParam(value = "sold", name = "sold", required = false) Integer sold) {
+		try {
+			BankAccount bankAccount = bankAccountService.findByLoginMail(principal.getName());
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
+			bankAccountService.substractSold(bankAccount, sender, sold);
+		} catch (Exception ex) {
+			logger.error("Error dans substractSoldGet : %s ", ex.getMessage());
+		}
+		return "redirect:/transfer";
+	}
+
+	@PostMapping("/addBank")
+	public String addBankPost(Principal principal, RedirectAttributes redirectAttributes,
+			@RequestParam(value = "bankName", name = "bankName", required = false) String bankName,
+			@RequestParam(value = "iban", name = "iban", required = false) String iban,
+			@RequestParam(value = "bic", name = "bic", required = false) String bic) {
+		try {
+
+			BankAccount registration = bankAccountService.registerNewBank(null, bankName, iban, bic,
+					principal.getName());
+
+			if (registration == null) {
+				redirectAttributes.addAttribute("attribute", "index");
+			}
+
+		} catch (Exception ex) {
+			logger.error("Error dans addBank : %s ", ex.getMessage());
+		}
+		return "bank_page";
+	}
+
+	@GetMapping("/bank")
+	public String bankGet(Principal principal, Model bankModel) {
+
+		BankAccount ba = bankAccountService.findByLoginMail(principal.getName());
+		bankModel.addAttribute("banks", ba);
+
+		return "bank_page";
+	}
+
+	@GetMapping("/deleteBank")
+	public String deleteBankGet(
+			@RequestParam(value = "userBank", name = "userBank", required = false) String userBank) {
+		try {
+
+			BankAccount baOfUser = bankAccountService.findByLoginMail(userBank);
+			bankAccountService.deleteBankAccount(baOfUser);
+
+		} catch (Exception ex) {
+			logger.error("Error dans deleteBank : %s ", ex.getMessage());
+		}
+		return "bank_page";
 	}
 
 }

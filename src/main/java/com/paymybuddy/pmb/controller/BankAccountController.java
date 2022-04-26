@@ -42,7 +42,7 @@ public class BankAccountController {
 
 		BankAccount ba = bankAccountService.saveBankAccount(bankAccount);
 
-		if (ba.getIdPK() <= 0) {
+		if (ba.getId() <= 0) {
 			logger.error("Erreur dans create bankAccount : status No PK.");
 			return new ResponseEntity<>(ba, HttpStatus.NOT_FOUND);
 		}
@@ -55,7 +55,7 @@ public class BankAccountController {
 
 		BankAccount ba = bankAccountService.saveBankAccount(bankAccount);
 
-		if (ba.getIdPK() <= 0) {
+		if (ba.getId() <= 0) {
 			logger.error("Erreur dans update bankAccount : status No PK.");
 			return new ResponseEntity<>(ba, HttpStatus.NOT_FOUND);
 		}

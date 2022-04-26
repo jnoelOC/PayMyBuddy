@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pay my buddy Application</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home_style.css}" />
+     <link rel="stylesheet" type="text/css" th:href="@{/css/transfer_style.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:replace="/header_fragment :: #my_template_logo"></div>
+<div th:replace="/nav_fragment :: #my_template_nav"></div>
+
+<!-- 
+<table class="table table-success table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Bank name</th>
+      <th scope="col">Iban</th>
+      <th scope="col">Bic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>      
+      <td th:text="${bankNameModel}"></td>
+    </tr>
+  </tbody>
+</table>
+<h3 style="text-align:center"><span th:text="${bankNameModel}"></span></h3>
+
+<h3 style="text-align:center">IBAN	: <span th:text="${ibanModel}"></span></h3>
+<h3 style="text-align:center">BIC	: <span th:text="${bicModel}"></span></h3> -->
+<h3 style="text-align:center">Deposit/WithDraw</h3>
+<form th:action="@{/addSold}" style="text-align:center;white-space:pre" method="post">
+  <label for="sold">Enter a amount to be deposited:</label>
+  <input th:value="${sold}" type="number" id="soldId" name="sold"
+  placeholder="123456"
+  pattern="[0-9]{6}">
+  <input class="button buttonBlue" type="submit" value="Add money" />
+</form>   		
+
+<form th:action="@{/substractSold}" style="text-align:center;white-space:pre" method="post">
+  <label for="sold">Enter a amount to be withdrew:</label>
+  <input th:value="${sold}" type="number" id="soldId" name="sold"
+  placeholder="123456"
+  pattern="[0-9]{6}">
+  <input class="button buttonBlue" type="submit" value="Withdraw money" />
+</form>   
+</br>
+<h3 style="text-align:center">Add/Delete a bank</h3>
+<form name='b' th:action="@{/addBank}" style="text-align:center;white-space:pre" method="POST">
+	<label for="bname">Bank Name</label>
+	<input type="text" th:value="${bankName}" id="bankName" name="bankName">
+	<label for="iban">IBAN</label>
+	<input type="text" th:value="${iban}" id="iban" name="iban">
+	<label for="bic">BIC</label>
+	<input type="text" th:value="${bic}" id="bic" name="bic">
+ 	<input class="button buttonBlue" type="submit" value="Add bank" name="addingBank">
+</form>
+
+<form th:action="@{/deleteBank}" style="text-align:center;white-space:pre" method="get">
+<div class="table-responsive-md">
+<table class="table table-success table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Bank name</th>
+      <th scope="col">Iban</th>
+      <th scope="col">Bic</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="bank : ${banks}">      
+      <td th:text="${bank.bankName}"></td>
+      <td th:text="${bank.iban}"></td>
+      <td th:text="${bank.bic}"></td>
+      <td>
+      <a class="button buttonBlue" th:href="@{/deleteBank(userBank=${bank.loginMail})}">Delete</a>
+      </td> 
+    </tr>
+  </tbody>
+</table>
+</div> 
+ </form>
+</body>
+</html>

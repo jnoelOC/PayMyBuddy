@@ -13,6 +13,7 @@
 <div th:replace="/nav_fragment :: #my_template_nav"></div>
 <div class="container-fluid">
 <h3 style="text-align:center">Welcome, <strong><span th:text="${#authentication.getPrincipal().getUsername()}"></span></strong>, to transfer money to your friends !</h3>
+<h3 style="text-align:center">Your balance is <strong><span th:text="${sold}"></span></strong> Euros.</h3>
 </div>
 </body>
 </html>

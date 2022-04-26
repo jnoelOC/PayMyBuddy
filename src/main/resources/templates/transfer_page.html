@@ -19,7 +19,7 @@
 
 <h3 style="text-align:center">Send money
 <a th:href="@{/addConnection}">
-		<button class="button buttonBlue">Manage connections</button>
+		<button class="button buttonBlue">Manage friends</button>
 </a>
 </h3>
 
@@ -32,7 +32,7 @@
     		></option>
   </select> -->
  
-  <label for="userconnections">Select a connection:</label>
+  <label for="userconnections">Select a friend:</label>
   <select class="form-select" aria-label="Default select" name="userconnections" id="userconnections">
   <option selected th:each="connection : ${userconnections}" 
     		th:text="${connection}"

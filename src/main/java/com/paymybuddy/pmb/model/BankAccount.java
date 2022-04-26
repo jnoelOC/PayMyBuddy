@@ -19,27 +19,27 @@ public class BankAccount {
 	private String bic;
 	@Column(name = "BANK_NAME")
 	private String bankName;
-	@Column(name = "LOGIN_MAIL_FK")
-	private String loginMailFK;
+	@Column(name = "LOGIN_MAIL")
+	private String loginMail;
 
 	public BankAccount() {
 	}
 
-	public BankAccount(Long idPK, String iban, String bic, String bankName, String loginMailFK) {
+	public BankAccount(Long id, String bankName, String iban, String bic, String loginMail) {
 		super();
-		this.id = idPK;
+		this.id = id;
 		this.iban = iban;
 		this.bic = bic;
 		this.bankName = bankName;
-		this.loginMailFK = loginMailFK;
+		this.loginMail = loginMail;
 	}
 
-	public Long getIdPK() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setIdPK(Long idPK) {
-		this.id = idPK;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getIban() {
@@ -66,12 +66,12 @@ public class BankAccount {
 		this.bankName = bankName;
 	}
 
-	public String getLoginMailFK() {
-		return loginMailFK;
+	public String getLoginMail() {
+		return loginMail;
 	}
 
-	public void setLoginMailFK(String loginMailFK) {
-		this.loginMailFK = loginMailFK;
+	public void setLoginMail(String loginMail) {
+		this.loginMail = loginMail;
 	}
 
 }
