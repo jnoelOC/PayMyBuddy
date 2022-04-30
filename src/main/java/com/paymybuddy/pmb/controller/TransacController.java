@@ -1,74 +1,206 @@
 package com.paymybuddy.pmb.controller;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.model.Transac;
+import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.service.TransacService;
+import com.paymybuddy.pmb.service.UserAccountService;
 
-@RestController
+@Controller
 public class TransacController {
 	public static final Logger logger = LogManager.getLogger(TransacController.class);
 
 	@Autowired
 	TransacService transacService;
 
-	@GetMapping("/transactions")
-	public List<Transac> findAllTransactions() {
+	@Autowired
+	UserAccountService userAccountService;
 
-		List<Transac> lt = transacService.findAllTransactions();
+	@ModelAttribute("connections")
+	public Set<String> getAllConnections() {
 
-		if (lt.isEmpty()) {
-			logger.error("Erreur dans Find all Transactions : status Non trouvé.");
-			return null;
+		List<UserAccount> lua = userAccountService.findAllUserAccounts();
+		Set<String> connections = new HashSet<>();
+		for (UserAccount ua : lua) {
+			connections.add(ua.getFirstName());
 		}
-		logger.info("Transactions trouvées.");
-		return lt;
+		return connections;
 	}
 
-	@PostMapping("/transac/create")
-	public ResponseEntity<Transac> createTransac(@RequestBody Transac transac) {
+	@ModelAttribute("userconnections")
+	public List<String> getConnectionsOfOneUser(Model model, RedirectAttributes redirectAttributes,
+			Principal principal) {
 
-		Transac ts = transacService.saveTransac(transac);
-
-		if (ts.getIdTransaction() <= 0) {
-			logger.error("Erreur dans create Transac : status No PK.");
-			return new ResponseEntity<>(ts, HttpStatus.NOT_FOUND);
+		List<UserAccount> lua = null;
+		List<String> connections = new ArrayList<>();
+		try {
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
+			/*
+			 * Optional<UserAccount> toto = userAccountService.findById(1L); if
+			 * (toto.isPresent()) { UserAccount toto2 = toto.get(); }
+			 */
+			lua = userAccountService.retrieveConxUserAccount(sender);
+			for (UserAccount usac : lua) {
+				connections.add(usac.getLoginMail());
+			}
+		} catch (Exception e) {
+			logger.error("Erreur dans getConnectionsOfOneUser : %s ", e.getMessage());
 		}
-		logger.info("Transaction créée.");
-		return new ResponseEntity<>(ts, HttpStatus.CREATED);
+
+		return connections;
 	}
 
-	@PutMapping("/transac/update")
-	public ResponseEntity<Transac> updateTransac(@RequestBody Transac transac) {
+	@ModelAttribute("transacs")
+	public List<Transac> getTransacs() {
+		String emailUserConnected = SecurityContextHolder.getContext().getAuthentication().getName();
+		return transacService.findAllTransactionsByGiver(emailUserConnected);
+	}
 
-		Transac ts = transacService.saveTransac(transac);
+	@GetMapping("/transfer")
+	public String transferGet() {
 
-		if (ts.getIdTransaction() <= 0) {
-			logger.error("Erreur dans update Transac : status No PK.");
-			return new ResponseEntity<>(ts, HttpStatus.NOT_FOUND);
+		try {
+
+		} catch (Exception e) {
+			logger.error("Erreur dans transferGet : %s ", e.getMessage());
 		}
-		logger.info("Transaction mise à jour.");
-		return new ResponseEntity<>(ts, HttpStatus.OK);
+		return "transfer_page";
 	}
 
-	@DeleteMapping("/transac/delete")
-	public ResponseEntity<org.springframework.http.HttpStatus> deleteTransac(@RequestBody Transac transac) {
+	@PostMapping("/transfer")
+	public String transferPost(Principal principal,
+			@RequestParam(value = "userconnections", name = "userconnections", required = false) String userconnections,
+			@RequestParam(value = "description", name = "description", required = false) String description,
+			@RequestParam(value = "amount", name = "amount", required = false) Double amount) {
 
-		transacService.deleteTransac(transac);
+		try {
 
-		logger.info("Transaction supprimée.");
-		return new ResponseEntity<>(HttpStatus.OK);
+			Transac transac = userAccountService.transferMoneyUserAccount(principal.getName(), userconnections,
+					description, amount);
+		} catch (Exception e) {
+			logger.error("Erreur dans transferPost : " + e.getMessage());
+		}
+		return "transfer_page";
 	}
+
+	@GetMapping("/transac/addConnection")
+	public String addConnectionGet(Principal principal, Model model) {
+		// récuperer la liste de tous les userAccount
+		List<UserAccount> all = userAccountService.findAllUserAccounts();
+		List<UserAccount> result = null;
+		try {
+			// récupérer toutes les connexions de l'utilisateur connecté
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
+			List<String> connectionsSender = userAccountService.retrieveConxUserAccount(sender).stream()
+					.map(UserAccount::getLoginMail).collect(Collectors.toList());
+			// rassembler connxOfSender et l'utilisateur connecté dans la même liste
+			connectionsSender.add(sender.getLoginMail());
+			// enlever les userAccount de la liste connxOfSender de la liste all
+			List<String> allEmail = all.stream().map(UserAccount::getLoginMail).collect(Collectors.toList());
+			result = allEmail.stream().filter(emailUser -> !connectionsSender.contains(emailUser))
+					.map(emailUser -> userAccountService.findByLoginMail(emailUser)).collect(Collectors.toList());
+
+		} catch (Exception ex) {
+			logger.error("Error dans AddConnectionGet : %s ", ex.getMessage());
+		}
+		model.addAttribute("connections", result);
+
+		return "/addConnection_page";
+	}
+
+	@PostMapping("/transac/addConnection")
+	public String addConnectionPost(Principal principal,
+			@RequestParam(value = "connection", name = "connection", required = false) String connectionMail) {
+		try {
+			// recuperer le choix de l'utilisateur
+			UserAccount receiver = userAccountService.findByLoginMail(connectionMail);
+			// recuperer le sender
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
+			// Ajouter une connexion à la liste des connexions du sender
+			UserAccount ua = userAccountService.addConxUserAccount(sender, receiver.getId());
+		} catch (Exception ex) {
+			logger.error("Error dans AddConnectionPost : %s ", ex.getMessage());
+		}
+		return "redirect:/transfer";
+	}
+
+	@GetMapping("/transac/deleteConnection")
+	public String deleteConnectionGet(Principal principal,
+			@RequestParam(value = "connectionMail", name = "connectionMail", required = false) String connectionMail) {
+		try {
+			// recuperer le sender
+			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
+			// Ajouter une connexion à la liste des connexions du sender
+			userAccountService.deleteConxUserAccount(sender, connectionMail);
+		} catch (Exception ex) {
+			logger.error("Error dans AddConnectionPost : %s ", ex.getMessage());
+		}
+		return "redirect:/transfer";
+	}
+
+//	@GetMapping("/transactions")
+//	public List<Transac> findAllTransactions() {
+//
+//		List<Transac> lt = transacService.findAllTransactions();
+//
+//		if (lt.isEmpty()) {
+//			logger.error("Erreur dans Find all Transactions : status Non trouvé.");
+//			return null;
+//		}
+//		logger.info("Transactions trouvées.");
+//		return lt;
+//	}
+//
+//	@PostMapping("/transac/create")
+//	public ResponseEntity<Transac> createTransac(@RequestBody Transac transac) {
+//
+//		Transac ts = transacService.saveTransac(transac);
+//
+//		if (ts.getIdTransaction() <= 0) {
+//			logger.error("Erreur dans create Transac : status No PK.");
+//			return new ResponseEntity<>(ts, HttpStatus.NOT_FOUND);
+//		}
+//		logger.info("Transaction créée.");
+//		return new ResponseEntity<>(ts, HttpStatus.CREATED);
+//	}
+//
+//	@PutMapping("/transac/update")
+//	public ResponseEntity<Transac> updateTransac(@RequestBody Transac transac) {
+//
+//		Transac ts = transacService.saveTransac(transac);
+//
+//		if (ts.getIdTransaction() <= 0) {
+//			logger.error("Erreur dans update Transac : status No PK.");
+//			return new ResponseEntity<>(ts, HttpStatus.NOT_FOUND);
+//		}
+//		logger.info("Transaction mise à jour.");
+//		return new ResponseEntity<>(ts, HttpStatus.OK);
+//	}
+//
+//	@DeleteMapping("/transac/delete")
+//	public ResponseEntity<org.springframework.http.HttpStatus> deleteTransac(@RequestBody Transac transac) {
+//
+//		transacService.deleteTransac(transac);
+//
+//		logger.info("Transaction supprimée.");
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 }

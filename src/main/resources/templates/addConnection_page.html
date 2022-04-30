@@ -17,7 +17,7 @@
 <div th:replace="/nav_fragment :: #my_template_nav"></div>
 
 <h3 style="text-align:center">Choose your connection :</h3>
-<form th:action="@{/addConnection}" style="text-align:center;white-space:pre" method="post">
+<form th:action="@{/transac/addConnection}" style="text-align:center;white-space:pre" method="post">
     <label for="connections"></label>
   <select class="form-select" aria-label="Default select" name="connection" id="connectionsId">
   <option selected th:each="connection : ${connections}" 
@@ -33,7 +33,7 @@
 -->
 
  
-<form th:action="@{/deleteConnection}" style="text-align:center;white-space:pre" method="get">
+<form th:action="@{/transac/deleteConnection}" style="text-align:center;white-space:pre" method="get">
 <div class="table-responsive-md">
 <table class="table table-success table-striped">
   <thead>
@@ -46,7 +46,7 @@
     <tr th:each="connection : ${userconnections}">      
       <td th:text="${connection}"></td>
       <td>
-      <a class="button buttonBlue" th:href="@{/deleteConnection(connectionMail=${connection})}">Delete</a>
+      <a class="button buttonBlue" th:href="@{/transac/deleteConnection(connectionMail=${connection})}">Delete</a>
       </td> 
     </tr>
   </tbody>

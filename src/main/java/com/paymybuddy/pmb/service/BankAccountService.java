@@ -33,9 +33,13 @@ public class BankAccountService {
 
 	public void addSold(BankAccount bankAccount, UserAccount sender, Integer sold) {
 		try {
-			if ((sold > 0) && (sender.getLoginMail().equalsIgnoreCase(bankAccount.getLoginMail()))) {
-				sender.setSolde(sender.getSolde() + sold);
-				userAccountRepository.save(sender);
+			if (!bankAccount.getIban().isBlank()) {
+				if ((sold > 0) && (sender.getLoginMail().equalsIgnoreCase(bankAccount.getLoginMail()))) {
+					sender.setSolde(sender.getSolde() + sold);
+					userAccountRepository.save(sender);
+				}
+			} else {
+				System.out.println("Aucun RIB !");
 			}
 		} catch (Exception ex) {
 			logger.error("Error dans addSold : %s ", ex.getMessage());
@@ -67,13 +71,18 @@ public class BankAccountService {
 	public BankAccount registerNewBank(Long id, String bankName, String iban, String bic, String loginMail)
 			throws IbanExistsException {
 
+		BankAccount result = null;
 		Boolean ibanExists = bankAccountRepository.existsByIban(iban);
 
 		if (Boolean.TRUE.equals(ibanExists)) {
 			throw new IbanExistsException("This bank account already exists with that iban: " + iban);
 		}
-		BankAccount registration = new BankAccount(null, bankName, iban, bic, loginMail);
 
-		return bankAccountRepository.save(registration);
+		if (!iban.isBlank()) {
+			BankAccount registration = new BankAccount(null, bankName, iban, bic, loginMail);
+			result = bankAccountRepository.save(registration);
+		}
+
+		return result;
 	}
 }

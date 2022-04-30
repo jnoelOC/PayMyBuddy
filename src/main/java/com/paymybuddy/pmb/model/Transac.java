@@ -18,7 +18,7 @@ public class Transac {
 	@Column(name = "DESCRIPTION", length = 60)
 	private String description;
 	@Column(name = "AMOUNT")
-	private Integer amount;
+	private Double amount;
 	@Column(name = "GIVER", length = 50)
 	private String giver;
 	@Column(name = "RECEIVER", length = 50)
@@ -31,7 +31,7 @@ public class Transac {
 	public Transac() {
 	}
 
-	public Transac(Long idTransaction, String description, Integer amount, String giver, String receiver) {
+	public Transac(Long idTransaction, String description, Double amount, String giver, String receiver) {
 		this.id = idTransaction;
 		this.description = description;
 		this.amount = amount;
@@ -63,11 +63,11 @@ public class Transac {
 		this.description = description;
 	}
 
-	public Integer getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Integer amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 

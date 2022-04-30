@@ -113,7 +113,7 @@ public class UserAccountService implements IUserAccountService {
 	}
 
 	@Transactional(rollbackFor = { SQLException.class })
-	public Transac transferMoneyUserAccount(String loginMail, String receiverMail, String description, Integer amount)
+	public Transac transferMoneyUserAccount(String loginMail, String receiverMail, String description, Double amount)
 			throws SQLException {
 
 		// chercher le sender avec le loginMail
@@ -122,9 +122,8 @@ public class UserAccountService implements IUserAccountService {
 		// chercher le receiver avec le receiverMail
 		UserAccount receiver = userAccountRepository.findByLoginMail(receiverMail);
 
-		Transac transac = new Transac(null, "description", 0, "senderMail", "receiverMail");
-		Integer soldeRec = 0;
-		Integer soldeSen = 0;
+		Transac transac = new Transac(null, "description", 0D, "senderMail", "receiverMail");
+		Double soldeRec;
 
 		transac.setDescription(description);
 		transac.setGiver(sender.getLoginMail());
@@ -135,9 +134,12 @@ public class UserAccountService implements IUserAccountService {
 		receiver.setSolde(soldeRec);
 		userAccountRepository.save(receiver);
 
-		soldeSen = sender.getSolde() - amount;
-		if (soldeSen > 0) {
-			sender.setSolde(soldeSen);
+		// Compute 0.5% to Bank admin for each transaction
+		Double littleAmount = 0.005 * amount;
+
+		if (sender.getSolde() > 0) {
+			Double newSold = computeNewSoldToBankAdmin(sender.getSolde(), amount, littleAmount);
+			sender.setSolde(newSold);
 			userAccountRepository.save(sender);
 
 		} else {
@@ -145,6 +147,15 @@ public class UserAccountService implements IUserAccountService {
 		}
 
 		return transacRepository.save(transac);
+	}
+
+	@Transactional
+	public Double computeNewSoldToBankAdmin(Double soldSender, Double amount, Double littleAmount) {
+
+		UserAccount admin = userAccountRepository.findByLoginMail("admin@gmail.com");
+		admin.setSolde(admin.getSolde() + littleAmount);
+		userAccountRepository.save(admin);
+		return soldSender - amount - littleAmount;
 	}
 
 	@Transactional
@@ -180,7 +191,7 @@ public class UserAccountService implements IUserAccountService {
 	}
 
 	public UserAccount registerNewUserAccount(Long id, String loginMail, String psswrd, String firstName,
-			String lastName, Integer sold) throws EmailExistsException {
+			String lastName, Double sold) throws EmailExistsException {
 
 		Boolean mailExists = userAccountRepository.existsByLoginMail(loginMail);
 

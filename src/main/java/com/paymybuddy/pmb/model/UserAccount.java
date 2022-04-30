@@ -37,7 +37,7 @@ public class UserAccount {
 	@Column(name = "LASTNAME", length = 30)
 	private String lastName;
 	@Column(name = "SOLDE")
-	private Integer solde;
+	private Double solde;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
@@ -56,7 +56,7 @@ public class UserAccount {
 	public UserAccount() {
 	}
 
-	public UserAccount(Long id, String loginMail, String psswrd, String firstName, String lastName, Integer solde) {
+	public UserAccount(Long id, String loginMail, String psswrd, String firstName, String lastName, Double solde) {
 		this.id = id;
 		this.loginMail = loginMail;
 		this.psswrd = psswrd;
@@ -121,11 +121,11 @@ public class UserAccount {
 		this.lastName = lastName;
 	}
 
-	public Integer getSolde() {
+	public Double getSolde() {
 		return solde;
 	}
 
-	public void setSolde(Integer solde) {
+	public void setSolde(Double solde) {
 		this.solde = solde;
 	}
 

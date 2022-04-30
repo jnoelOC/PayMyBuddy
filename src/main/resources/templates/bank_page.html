@@ -35,25 +35,31 @@
 
 <h3 style="text-align:center">IBAN	: <span th:text="${ibanModel}"></span></h3>
 <h3 style="text-align:center">BIC	: <span th:text="${bicModel}"></span></h3> -->
+<div class="container-fluid">
 <h3 style="text-align:center">Deposit/WithDraw</h3>
-<form th:action="@{/addSold}" style="text-align:center;white-space:pre" method="post">
-  <label for="sold">Enter a amount to be deposited:</label>
+<div class="row justify-content-around">
+<div class="col-4">
+<form th:action="@{/bank/addSold}" style="text-align:center;white-space:pre" method="post">
+  <label for="sold">Enter a amount to be deposited</label>
   <input th:value="${sold}" type="number" id="soldId" name="sold"
-  placeholder="123456"
-  pattern="[0-9]{6}">
+  placeholder="123456789"  
+  pattern="[0-9]{9}">
   <input class="button buttonBlue" type="submit" value="Add money" />
 </form>   		
-
-<form th:action="@{/substractSold}" style="text-align:center;white-space:pre" method="post">
-  <label for="sold">Enter a amount to be withdrew:</label>
+</div>
+<div class="col-4">
+<form th:action="@{/bank/substractSold}" style="text-align:center;white-space:pre" method="post">
+  <label for="sold">Enter a amount to be withdrew</label>
   <input th:value="${sold}" type="number" id="soldId" name="sold"
-  placeholder="123456"
-  pattern="[0-9]{6}">
+  placeholder="123456789"
+  pattern="[0-9]{9}">
   <input class="button buttonBlue" type="submit" value="Withdraw money" />
 </form>   
+</div></div>
+</div>
 </br>
 <h3 style="text-align:center">Add/Delete a bank</h3>
-<form name='b' th:action="@{/addBank}" style="text-align:center;white-space:pre" method="POST">
+<form name='b' th:action="@{/bank/add}" style="text-align:center;white-space:pre" method="POST">
 	<label for="bname">Bank Name</label>
 	<input type="text" th:value="${bankName}" id="bankName" name="bankName">
 	<label for="iban">IBAN</label>
@@ -63,7 +69,7 @@
  	<input class="button buttonBlue" type="submit" value="Add bank" name="addingBank">
 </form>
 
-<form th:action="@{/deleteBank}" style="text-align:center;white-space:pre" method="get">
+<form th:action="@{/bank/delete}" style="text-align:center;white-space:pre" method="get">
 <div class="table-responsive-md">
 <table class="table table-success table-striped">
   <thead>
@@ -80,7 +86,7 @@
       <td th:text="${bank.iban}"></td>
       <td th:text="${bank.bic}"></td>
       <td>
-      <a class="button buttonBlue" th:href="@{/deleteBank(userBank=${bank.loginMail})}">Delete</a>
+      <a class="button buttonBlue" th:href="@{/bank/delete(userBank=${bank.loginMail})}">Delete</a>
       </td> 
     </tr>
   </tbody>
