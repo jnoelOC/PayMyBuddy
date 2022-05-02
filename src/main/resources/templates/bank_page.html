@@ -16,43 +16,24 @@
 <div th:replace="/header_fragment :: #my_template_logo"></div>
 <div th:replace="/nav_fragment :: #my_template_nav"></div>
 
-<!-- 
-<table class="table table-success table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Bank name</th>
-      <th scope="col">Iban</th>
-      <th scope="col">Bic</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>      
-      <td th:text="${bankNameModel}"></td>
-    </tr>
-  </tbody>
-</table>
-<h3 style="text-align:center"><span th:text="${bankNameModel}"></span></h3>
-
-<h3 style="text-align:center">IBAN	: <span th:text="${ibanModel}"></span></h3>
-<h3 style="text-align:center">BIC	: <span th:text="${bicModel}"></span></h3> -->
 <div class="container-fluid">
 <h3 style="text-align:center">Deposit/WithDraw</h3>
 <div class="row justify-content-around">
 <div class="col-4">
 <form th:action="@{/bank/addSold}" style="text-align:center;white-space:pre" method="post">
   <label for="sold">Enter a amount to be deposited</label>
-  <input th:value="${sold}" type="number" id="soldId" name="sold"
-  placeholder="123456789"  
-  pattern="[0-9]{9}">
+  <input th:value="${sold}" type="number" id="soldId" name="sold" value="10" min="1" max="999999"
+  placeholder="123456"  
+  pattern="[0-9]{6}">
   <input class="button buttonBlue" type="submit" value="Add money" />
 </form>   		
 </div>
 <div class="col-4">
 <form th:action="@{/bank/substractSold}" style="text-align:center;white-space:pre" method="post">
   <label for="sold">Enter a amount to be withdrew</label>
-  <input th:value="${sold}" type="number" id="soldId" name="sold"
-  placeholder="123456789"
-  pattern="[0-9]{9}">
+  <input th:value="${sold}" type="number" id="soldId" name="sold" value="10" min="1" max="999999"
+  placeholder="123456"
+  pattern="[0-9]{6}">
   <input class="button buttonBlue" type="submit" value="Withdraw money" />
 </form>   
 </div></div>

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
@@ -46,8 +45,7 @@ public class TransacController {
 	}
 
 	@ModelAttribute("userconnections")
-	public List<String> getConnectionsOfOneUser(Model model, RedirectAttributes redirectAttributes,
-			Principal principal) {
+	public List<String> getConnectionsOfOneUser(Principal principal) {
 
 		List<UserAccount> lua = null;
 		List<String> connections = new ArrayList<>();
@@ -68,20 +66,29 @@ public class TransacController {
 		return connections;
 	}
 
-	@ModelAttribute("transacs")
-	public List<Transac> getTransacs() {
-		String emailUserConnected = SecurityContextHolder.getContext().getAuthentication().getName();
-		return transacService.findAllTransactionsByGiver(emailUserConnected);
-	}
+//	@ModelAttribute("transacs")
+//	public List<Transac> getTransacs() {
+//		String emailUserConnected = SecurityContextHolder.getContext().getAuthentication().getName();
+//		return transacService.findAllTransactionsByGiver(emailUserConnected);
+//	}
 
 	@GetMapping("/transfer")
-	public String transferGet() {
+	public String transferGet(Model model) {
 
+		List<Transac> ltOfReceiver = new ArrayList<>();
+		List<Transac> ltOfGiver = new ArrayList<>();
 		try {
+
+			String emailUserConnected = SecurityContextHolder.getContext().getAuthentication().getName();
+			ltOfGiver = transacService.findAllTransactionsByGiver(emailUserConnected);
+			ltOfReceiver = transacService.findAllTransactionsByReceiver(emailUserConnected);
+			ltOfGiver.addAll(ltOfReceiver);
+			model.addAttribute("transacs", ltOfGiver);
 
 		} catch (Exception e) {
 			logger.error("Erreur dans transferGet : %s ", e.getMessage());
 		}
+
 		return "transfer_page";
 	}
 
@@ -91,13 +98,16 @@ public class TransacController {
 			@RequestParam(value = "description", name = "description", required = false) String description,
 			@RequestParam(value = "amount", name = "amount", required = false) Double amount) {
 
+		String msg = "";
 		try {
 
 			Transac transac = userAccountService.transferMoneyUserAccount(principal.getName(), userconnections,
 					description, amount);
 		} catch (Exception e) {
+			msg = "Sold isn't enough !";
 			logger.error("Erreur dans transferPost : " + e.getMessage());
 		}
+
 		return "transfer_page";
 	}
 

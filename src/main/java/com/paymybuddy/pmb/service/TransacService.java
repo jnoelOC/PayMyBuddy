@@ -23,6 +23,17 @@ public class TransacService {
 		return transacRepository.findAll();
 	}
 
+	public List<Transac> findAllTransactionsByReceiver(String user) {
+		List<Transac> allTrxOfReceiver = new ArrayList<>();
+		List<Transac> allTrx = transacRepository.findAll();
+		for (Transac oneTrx : allTrx) {
+			if (oneTrx.getReceiver().equalsIgnoreCase(user)) {
+				allTrxOfReceiver.add(oneTrx);
+			}
+		}
+		return allTrxOfReceiver;
+	}
+
 	public List<Transac> findAllTransactionsByGiver(String user) {
 		List<Transac> allTrxOfGiver = new ArrayList<>();
 		List<Transac> allTrx = transacRepository.findAll();

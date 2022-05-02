@@ -16,22 +16,11 @@
 <div th:replace="/nav_fragment :: #my_template_nav"></div>
 
 </br>
-
 <h3 style="text-align:center">Send money
-<a th:href="@{/transac/addConnection}">
-		<button class="button buttonBlue">Manage friends</button>
-</a>
+<a th:href="@{/transac/addConnection}"><button class="button buttonBlue">Manage friends</button></a>
 </h3>
 
-<form th:action="@{/transfer}" style="text-align:center;" method="post">
-<!--   <label for="userconnections">Select a connection:</label>
-  <select name="userconnections" id="userconnections">
-    <option th:each="connection : ${userconnections}" 
-    		th:text="${connection}"
-    		th:value="${connection}"
-    		></option>
-  </select> -->
- 
+<form th:action="@{/transfer}" style="text-align:center;" method="post"> 
   <label for="userconnections">Select a friend:</label>
   <select class="form-select" aria-label="Default select" name="userconnections" id="userconnections">
   <option selected th:each="connection : ${userconnections}" 
@@ -39,19 +28,18 @@
     		th:value="${connection}"
     		></option>
   </select>
-
   <label for="description">Description:</label>
-  	<input type="text" id="description" name="description" value="any description">
-
+  	<input type="text" id="description" name="description" placeholder="any description">
   <label for="amount">Amount:</label>
  	<input type="number" id="amount" name="amount" value="10" min="1" max="500">
-
   <input class="button buttonBlue" type="submit" value="Pay">
 
 </br></br>
 <h3 style="text-align:center">My transactions</h3>
+<div th:if="${not #lists.isEmpty(transacs)}">
 <div class="table-responsive-md">
 <table class="table table-success table-striped">
+	<caption>List of transactions</caption>
   	 <thead>
     <tr>
       <th scope="col">Friend</th>
@@ -60,22 +48,14 @@
     </tr>
   </thead>
   <tbody>
-    <tr th:each="transac:${transacs}">
-      <td th:text="${transac.receiver}"></td> 
+    <tr th:each="transac : ${transacs}">
+      <td th:text="${transac.receiver}==${#authentication.getPrincipal().getUsername()}? ${transac.giver} : ${transac.receiver}"></td> 
       <td th:text="${transac.description}"></td>
-      <td th:text="${transac.amount}"></td> 
+      <td th:text="${transac.receiver}==${#authentication.getPrincipal().getUsername()}? ${+transac.amount} : ${-transac.amount}"></td> 
     </tr>
   </tbody>
-<!--   	<tr>
-    	<th>Friend</th> <th>Description</th> <th>Amount</th>
-    </tr>
-  <tr th:each="transac:${transacs}">
-  	<td th:text="${transac.receiver}"></td> 
-    <td th:text="${transac.description}"></td>
-    <td th:text="${transac.amount}"></td> 
-  </tr> --> 
 </table>
-</div>
+</div></div>
 </form>
 </body>
 </html>

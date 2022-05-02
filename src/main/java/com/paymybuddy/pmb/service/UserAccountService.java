@@ -137,7 +137,7 @@ public class UserAccountService implements IUserAccountService {
 		// Compute 0.5% to Bank admin for each transaction
 		Double littleAmount = 0.005 * amount;
 
-		if (sender.getSolde() > 0) {
+		if (sender.getSolde() > amount && sender.getSolde() > 0) {
 			Double newSold = computeNewSoldToBankAdmin(sender.getSolde(), amount, littleAmount);
 			sender.setSolde(newSold);
 			userAccountRepository.save(sender);

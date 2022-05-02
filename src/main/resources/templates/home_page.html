@@ -13,7 +13,11 @@
 <body>
 <div th:replace="/header_fragment :: #my_template_logo"></div>
 <div th:replace="/nav_fragment :: #my_template_nav"></div>
+
 <div class="container-fluid">
+</br>
+<h3 style="text-align:right"> <span th:text="${#dates.dayOfWeekName(#calendars.createNow())}"></span>
+<span th:text="${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}">12 May 2011</span></h3>
 <h3 style="text-align:center">Welcome, <strong><span th:text="${#authentication.getPrincipal().getUsername()}"></span></strong>, to transfer money to your friends !</h3>
 <h3 style="text-align:center">Your balance is <strong><span th:text="${sold}"></span></strong> Euros.</h3>
 </div>
