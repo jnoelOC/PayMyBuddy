@@ -12,10 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -39,17 +37,11 @@ public class UserAccount {
 	@Column(name = "SOLDE")
 	private Double solde;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
-	public List<BankAccount> bankAccounts = new ArrayList<>();
-//	@OneToOne(fetch = FetchType.LAZY)
-//	public BankAccount bankAccounts = new BankAccount();
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_bankAccount", joinColumns = { @JoinColumn(name = "id") }, inverseJoinColumns = {
+			@JoinColumn(name = "user_bankAccount_id") })
+	public BankAccount bankAccount;
 
-//	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY)
-//	public List<Transac> transacs = new ArrayList<>();
-
-//	@ManyToMany(fetch = FetchType.EAGER)
-//	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
 	@ManyToMany(fetch = FetchType.LAZY)
 	// @Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
 	@JoinTable(name = "connection", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "connection_id"))
@@ -66,14 +58,6 @@ public class UserAccount {
 		this.lastName = lastName;
 		this.solde = solde;
 	}
-
-//	public List<Transac> getTransacs() {
-//		return transacs;
-//	}
-//
-//	public void setTransacs(List<Transac> transacs) {
-//		this.transacs = transacs;
-//	}
 
 	public List<UserAccount> getConnections() {
 		return connections;

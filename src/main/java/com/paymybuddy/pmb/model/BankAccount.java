@@ -2,9 +2,11 @@ package com.paymybuddy.pmb.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,8 +26,11 @@ public class BankAccount {
 	@Column(name = "LOGIN_MAIL", length = 50)
 	private String loginMail;
 //	@OneToOne
-//	@JoinColumn(name = "LOGIN_MAIL")
+//	@JoinColumn(name = "LOGIN_MAIL", length = 50)
 //	private UserAccount user;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	public UserAccount userAccount;
 
 	public BankAccount() {
 	}
