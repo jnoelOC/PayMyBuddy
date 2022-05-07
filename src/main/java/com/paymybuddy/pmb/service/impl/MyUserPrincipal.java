@@ -1,4 +1,4 @@
-package com.paymybuddy.pmb.service;
+package com.paymybuddy.pmb.service.impl;
 
 import java.util.Collection;
 
@@ -9,6 +9,10 @@ import com.paymybuddy.pmb.model.UserAccount;
 
 public class MyUserPrincipal implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3558649519090510297L;
 	private UserAccount userAccount;
 
 	public MyUserPrincipal(UserAccount userAccount) {

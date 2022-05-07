@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
-import com.paymybuddy.pmb.service.TransacService;
-import com.paymybuddy.pmb.service.UserAccountService;
+import com.paymybuddy.pmb.service.impl.TransacService;
+import com.paymybuddy.pmb.service.impl.UserAccountService;
 
 @Controller
 public class TransacController {
@@ -98,17 +98,15 @@ public class TransacController {
 			@RequestParam(value = "description", name = "description", required = false) String description,
 			@RequestParam(value = "amount", name = "amount", required = false) Double amount) {
 
-		String msg = "";
 		try {
 
 			Transac transac = userAccountService.transferMoneyUserAccount(principal.getName(), userconnections,
 					description, amount);
 		} catch (Exception e) {
-			msg = "Sold isn't enough !";
-			logger.error("Erreur dans transferPost : " + e.getMessage());
+			logger.error("Erreur dans transferPost : %s", e.getMessage());
 		}
 
-		return "transfer_page";
+		return "redirect:/transfer";
 	}
 
 	@GetMapping("/transac/addConnection")

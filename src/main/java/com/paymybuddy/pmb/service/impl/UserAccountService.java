@@ -1,4 +1,4 @@
-package com.paymybuddy.pmb.service;
+package com.paymybuddy.pmb.service.impl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.repository.ITransacRepository;
 import com.paymybuddy.pmb.repository.IUserAccountRepository;
+import com.paymybuddy.pmb.service.IUserAccountService;
 
 @Service
 public class UserAccountService implements IUserAccountService {

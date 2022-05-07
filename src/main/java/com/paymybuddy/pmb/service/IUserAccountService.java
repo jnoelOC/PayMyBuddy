@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
+import com.paymybuddy.pmb.service.impl.EmailExistsException;
 
 public interface IUserAccountService {
 	public List<UserAccount> findAllUserAccounts();

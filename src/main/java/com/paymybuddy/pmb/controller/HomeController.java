@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.model.UserAccount;
-import com.paymybuddy.pmb.service.UserAccountService;
+import com.paymybuddy.pmb.service.impl.UserAccountService;
 
 @Controller
 public class HomeController {

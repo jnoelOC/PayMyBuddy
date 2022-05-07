@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.model.BankAccount;
 import com.paymybuddy.pmb.model.UserAccount;
-import com.paymybuddy.pmb.service.BankAccountService;
-import com.paymybuddy.pmb.service.UserAccountService;
+import com.paymybuddy.pmb.service.impl.BankAccountService;
+import com.paymybuddy.pmb.service.impl.UserAccountService;
 
 @Controller
 public class BankAccountController {

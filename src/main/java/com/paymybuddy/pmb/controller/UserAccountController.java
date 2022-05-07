@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.paymybuddy.pmb.service.TransacService;
-import com.paymybuddy.pmb.service.UserAccountService;
+import com.paymybuddy.pmb.service.impl.TransacService;
+import com.paymybuddy.pmb.service.impl.UserAccountService;
 
 @Controller
 public class UserAccountController {

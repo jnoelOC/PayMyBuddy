@@ -5,22 +5,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "bank_account")
 public class BankAccount {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id", nullable = false, unique = true)
 	private Long id;
-	@Column(name = "IBAN")
+	@Column(name = "IBAN", length = 30)
 	private String iban;
-	@Column(name = "BIC")
+	@Column(name = "BIC", length = 15)
 	private String bic;
-	@Column(name = "BANK_NAME")
+	@Column(name = "BANK_NAME", length = 30)
 	private String bankName;
-	@Column(name = "LOGIN_MAIL")
+	@Column(name = "LOGIN_MAIL", length = 50)
 	private String loginMail;
+//	@OneToOne
+//	@JoinColumn(name = "LOGIN_MAIL")
+//	private UserAccount user;
 
 	public BankAccount() {
 	}

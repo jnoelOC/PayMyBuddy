@@ -1,4 +1,4 @@
-package com.paymybuddy.pmb.service;
+package com.paymybuddy.pmb.service.impl;
 
 import java.util.List;
 

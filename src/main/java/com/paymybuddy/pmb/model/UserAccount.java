@@ -42,6 +42,8 @@ public class UserAccount {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
 	public List<BankAccount> bankAccounts = new ArrayList<>();
+//	@OneToOne(fetch = FetchType.LAZY)
+//	public BankAccount bankAccounts = new BankAccount();
 
 //	@OneToMany(mappedBy = "userAccount", fetch = FetchType.LAZY)
 //	public List<Transac> transacs = new ArrayList<>();
@@ -49,7 +51,7 @@ public class UserAccount {
 //	@ManyToMany(fetch = FetchType.EAGER)
 //	@Cascade({ CascadeType.SAVE_UPDATE, CascadeType.MERGE, CascadeType.PERSIST })
 	@ManyToMany(fetch = FetchType.LAZY)
-	@Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
+	// @Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
 	@JoinTable(name = "connection", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "connection_id"))
 	public List<UserAccount> connections = new ArrayList<>();
 
