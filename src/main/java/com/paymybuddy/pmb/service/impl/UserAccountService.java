@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -106,7 +105,9 @@ public class UserAccountService implements IUserAccountService {
 
 			Optional<UserAccount> ua = userAccountRepository.findById(lng);
 			if (ua.isPresent()) {
-				connections.addAll(ua.stream().collect(Collectors.toList()));
+				// connections.addAll(ua.stream().collect(Collectors.toList()));
+				UserAccount ua2 = ua.get();
+				connections.add(ua2);
 			}
 		}
 

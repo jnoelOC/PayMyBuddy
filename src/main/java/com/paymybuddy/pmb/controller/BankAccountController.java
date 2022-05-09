@@ -72,7 +72,7 @@ public class BankAccountController {
 		} catch (Exception ex) {
 			logger.error("Error dans addBank : %s ", ex.getMessage());
 		}
-		return "bank_page";
+		return "redirect:/bank";
 	}
 
 	@GetMapping("/bank")

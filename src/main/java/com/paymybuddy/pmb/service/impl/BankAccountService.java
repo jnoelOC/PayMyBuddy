@@ -33,7 +33,7 @@ public class BankAccountService {
 
 	public void addSold(BankAccount bankAccount, UserAccount sender, Integer sold) {
 		try {
-			if (!bankAccount.getIban().isBlank()) {
+			if (!bankAccount.getIban().isEmpty()) {
 				if ((sold > 0) && (sender.getLoginMail().equalsIgnoreCase(bankAccount.getLoginMail()))) {
 					sender.setSolde(sender.getSolde() + sold);
 					userAccountRepository.save(sender);
@@ -78,7 +78,7 @@ public class BankAccountService {
 			throw new IbanExistsException("This bank account already exists with that iban: " + iban);
 		}
 
-		if (!iban.isBlank()) {
+		if (!iban.isEmpty()) {
 			BankAccount registration = new BankAccount(null, bankName, iban, bic, loginMail);
 			result = bankAccountRepository.save(registration);
 		}
