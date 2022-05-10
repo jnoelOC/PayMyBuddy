@@ -1,3 +1,18 @@
+This is READ.me file of PayMyBuddy application.
+
+
+- It was developed with Java version 1.8.
+
+
+- The safe command in a terminal to run application is :
+
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.datasource.username=%username% --spring.datasource.password=%password%"
+
+by replacing %username% and %password% by your credentials.
+
+
+- The application.properties file contains at least :
+
 #Global config
 spring.application.name=PayMyBuddy
 
@@ -14,12 +29,5 @@ spring.sql.init.mode=always
 spring.jpa.defer-datasource-initialization=false
 
 
-# pour le cache Thymeleaf
-spring.thymeleaf.cache=false
-# pour afficher les requetes SQL executees
-spring.jpa.show-sql = true
-# pour desactiver l'option OSIV open session in view
-spring.jpa.open-in-view=false
-# pour desactiver la page error whitelabel
-server.error.whitelabel.enabled=false
+It will create a database with tables and populate it with data.
 

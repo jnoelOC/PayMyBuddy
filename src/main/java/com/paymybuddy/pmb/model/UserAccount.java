@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -36,11 +35,6 @@ public class UserAccount {
 	private String lastName;
 	@Column(name = "SOLDE")
 	private Double solde;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_bankAccount", joinColumns = { @JoinColumn(name = "id") }, inverseJoinColumns = {
-			@JoinColumn(name = "user_bankAccount_id") })
-	public BankAccount bankAccount;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	// @Cascade({ CascadeType.MERGE, CascadeType.PERSIST })
