@@ -42,11 +42,17 @@ public class UserAccountService implements IUserAccountService {
 		return userAccountRepository.findByLoginMail(user);
 	}
 
-	public UserAccount getById(Long id) {
-		return userAccountRepository.getById(id);
-	}
+//	public UserAccount getById(Long id) {
+//		return userAccountRepository.getById(id);
+//	}
 
 	public Optional<UserAccount> findById(Long id) {
+		UserAccount ua1 = new UserAccount(1L, "jojo@gmail.com", "jojo", "Max", "Jacob", 50D);
+
+		if (id <= 0L) {
+			return Optional.of(ua1);
+		}
+
 		return userAccountRepository.findById(id);
 	}
 

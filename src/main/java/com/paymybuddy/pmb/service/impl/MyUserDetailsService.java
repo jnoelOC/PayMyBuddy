@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.paymybuddy.pmb.model.UserAccount;
@@ -25,7 +24,8 @@ public class MyUserDetailsService implements UserDetailsService {
 		UserAccount ua = userAccountRepository.findByLoginMail(loginMail);
 
 		if (ua == null) {
-			throw new UsernameNotFoundException(loginMail);
+			return null;
+			// throw new UsernameNotFoundException(loginMail);
 		}
 
 		return new User(ua.getLoginMail(), ua.getPsswrd(),

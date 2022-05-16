@@ -11,7 +11,7 @@ import com.paymybuddy.pmb.service.impl.EmailExistsException;
 public interface IUserAccountService {
 	public List<UserAccount> findAllUserAccounts();
 
-	public UserAccount getById(Long id);
+//	public UserAccount getById(Long id);
 
 	public Optional<UserAccount> findById(Long id);
 
