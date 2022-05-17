@@ -67,9 +67,9 @@ class MyUserDetailsServiceTest {
 		UserDetails userDetails;
 		String loginMail = "j@gmail.com";
 		UserAccount ua = null;
-		// Act
-		when(userAccountRepository.findByLoginMail(loginMail)).thenReturn(ua);
 
+		when(userAccountRepository.findByLoginMail(loginMail)).thenReturn(ua);
+		// Act
 		userDetails = myUserDetailsService.loadUserByUsername(loginMail);
 		if (userDetails == null) {
 			ret = false;
@@ -91,9 +91,9 @@ class MyUserDetailsServiceTest {
 		String loginMail = "j@gmail.com";
 		String password = "$2a$10$MdYdeJHJ4.r1HJF0h2XUm.fa5.AfDhKqX.eVmhgVKPKCViAHPoYU2";
 		UserAccount ua = new UserAccount(1L, loginMail, password, "Max", "Jacob", 500D);
-		// Act
-		when(userAccountRepository.findByLoginMail(loginMail)).thenReturn(ua);
 
+		when(userAccountRepository.findByLoginMail(loginMail)).thenReturn(ua);
+		// Act
 		userDetails = myUserDetailsService.loadUserByUsername(loginMail);
 		if (userDetails != null) {
 			ret = true;

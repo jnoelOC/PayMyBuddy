@@ -160,9 +160,14 @@ public class UserAccountService implements IUserAccountService {
 	@Transactional
 	public Double computeNewSoldToBankAdmin(Double soldSender, Double amount, Double littleAmount) {
 
-		UserAccount admin = userAccountRepository.findByLoginMail("admin@gmail.com");
-		admin.setSolde(admin.getSolde() + littleAmount);
-		userAccountRepository.save(admin);
+		try {
+			UserAccount admin = userAccountRepository.findByLoginMail("admin@gmail.com");
+			admin.setSolde(admin.getSolde() + littleAmount);
+			userAccountRepository.save(admin);
+		} catch (Exception ex) {
+			logger.error("computeNewSoldToBankAdmin : %s ", ex.getMessage());
+			ex.printStackTrace();
+		}
 		return soldSender - amount - littleAmount;
 	}
 
