@@ -39,21 +39,26 @@ public class BankAccountService {
 					userAccountRepository.save(sender);
 				}
 			} else {
-				System.out.println("Aucun RIB !");
+				logger.error("Dans addSold : Aucun RIB.");
 			}
 		} catch (Exception ex) {
-			logger.error("Error dans addSold : %s ", ex.getMessage());
+			logger.error("Error dans addSold : " + ex.getMessage());
 		}
 	}
 
 	public void substractSold(BankAccount bankAccount, UserAccount sender, Integer sold) {
 		try {
-			if ((sender.getSolde() >= sold) && (sender.getLoginMail().equalsIgnoreCase(bankAccount.getLoginMail()))) {
-				sender.setSolde(sender.getSolde() - sold);
-				userAccountRepository.save(sender);
+			if (!bankAccount.getIban().isEmpty()) {
+				if ((sender.getSolde() >= sold)
+						&& (sender.getLoginMail().equalsIgnoreCase(bankAccount.getLoginMail()))) {
+					sender.setSolde(sender.getSolde() - sold);
+					userAccountRepository.save(sender);
+				}
+			} else {
+				logger.error("Dans substractSold : Aucun RIB.");
 			}
 		} catch (Exception ex) {
-			logger.error("Error dans substractSold : %s ", ex.getMessage());
+			logger.error("Error dans substractSold : " + ex.getMessage());
 		}
 	}
 

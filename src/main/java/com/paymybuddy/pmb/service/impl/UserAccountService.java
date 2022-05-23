@@ -8,8 +8,6 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,7 +87,7 @@ public class UserAccountService implements IUserAccountService {
 			sender.setConnections(connections);
 
 		} catch (Exception ex) {
-			logger.error("Error dans addConxUserAccount : %s ", ex.getMessage());
+			logger.error("Error dans addConxUserAccount : " + ex.getMessage());
 		}
 		return userAccountRepository.save(sender);
 	}
@@ -97,26 +95,23 @@ public class UserAccountService implements IUserAccountService {
 	@Transactional
 	public List<UserAccount> retrieveConxUserAccount(UserAccount sender) {
 
-		Pageable page = null;
-		Page<Long> pageOfLg = null;
-
 		List<UserAccount> connections = new ArrayList<>();
 		List<Long> listOfLg = null;
-		Long lg = 0L;
-		// pageOfLg = userAccountRepository.chercherConnexions(sender.getIdPK(), page);
-		listOfLg = userAccountRepository.chercherConnexions(sender.getId());
+		try {
+			listOfLg = userAccountRepository.chercherConnexions(sender.getId());
 
-//		List<Long> listOfLg = pageOfLg.getContent();
-		for (Long lng : listOfLg) {
+			for (Long lng : listOfLg) {
 
-			Optional<UserAccount> ua = userAccountRepository.findById(lng);
-			if (ua.isPresent()) {
-				// connections.addAll(ua.stream().collect(Collectors.toList()));
-				UserAccount ua2 = ua.get();
-				connections.add(ua2);
+				Optional<UserAccount> ua = userAccountRepository.findById(lng);
+				if (ua.isPresent()) {
+					// connections.addAll(ua.stream().collect(Collectors.toList()));
+					UserAccount ua2 = ua.get();
+					connections.add(ua2);
+				}
 			}
+		} catch (Exception e) {
+			logger.error("Error dans retrieveConxUserAccount : " + e.getMessage());
 		}
-
 		return connections;
 	}
 
@@ -198,7 +193,7 @@ public class UserAccountService implements IUserAccountService {
 			sender.setConnections(connections);
 
 		} catch (Exception ex) {
-			logger.error("Error dans addConxUserAccount : %s ", ex.getMessage());
+			logger.error("Error dans deleteConxUserAccount : " + ex.getMessage());
 		}
 		return userAccountRepository.save(sender);
 	}

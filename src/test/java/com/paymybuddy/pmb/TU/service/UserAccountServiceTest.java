@@ -21,11 +21,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.repository.ITransacRepository;
 import com.paymybuddy.pmb.repository.IUserAccountRepository;
+import com.paymybuddy.pmb.service.impl.EmailExistsException;
 import com.paymybuddy.pmb.service.impl.UserAccountService;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +43,9 @@ class UserAccountServiceTest {
 
 	@Mock
 	private ITransacRepository transacRepository;
+
+	@Mock
+	private PasswordEncoder passwordEncoder;
 
 	@BeforeAll
 	private static void setUp() {
@@ -210,6 +215,7 @@ class UserAccountServiceTest {
 	void AddConnectionUserAccount_ShouldReturnTrue() {
 		// Arrange
 		Boolean ret = false;
+		Long idOfReceiver = 2L;
 		String mail = "jojo@gmail.com";
 		UserAccount sender = new UserAccount(1L, mail, "jojo", "Max", "Jacob", 50D);
 		UserAccount ua1 = new UserAccount(2L, "jaja@gmail.com", "jaja", "Max", "Jacob", 20D);
@@ -229,9 +235,10 @@ class UserAccountServiceTest {
 
 		lenient().when(userAccountService.retrieveConxUserAccount(sender)).thenReturn(connections);
 		lenient().when(userAccountService.findAllUserAccounts()).thenReturn(listOfAllUa);
-		when(userAccountRepository.save(sender)).thenReturn(ua1);
+		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(ua1);
+
 		// Act
-		ua2 = userAccountService.saveUserAccount(sender);
+		ua2 = userAccountService.addConxUserAccount(sender, idOfReceiver);
 		if (ua2 != null) {
 			ret = true;
 		}
@@ -320,7 +327,99 @@ class UserAccountServiceTest {
 		}
 		// Assert
 		assertTrue(ret);
-
 	}
 
+	@Test
+	@DisplayName("Delete user account")
+	void DeleteUserAccount_ShouldReturnTrue() {
+		// Arrange
+		Boolean ret = false;
+		String mail = "jojo@gmail.com";
+		UserAccount ua1 = new UserAccount(1L, mail, "jojo", "Max", "Jacob", 50D);
+		userAccountRepository.delete(Mockito.any(UserAccount.class));
+
+		// Act
+		userAccountService.deleteUserAccount(ua1);
+		ret = true;
+
+		// Assert
+		assertTrue(ret);
+	}
+
+	@Test
+	@DisplayName("Delete Connection UserAccount")
+	void DeleteConnectionUserAccount_ShouldReturnTrue() {
+		// Arrange
+		Boolean ret = false;
+		String mail = "jojo@gmail.com";
+		UserAccount sender = new UserAccount(1L, mail, "jojo", "Max", "Jacob", 50D);
+		UserAccount ua1 = new UserAccount(2L, "jaja@gmail.com", "jaja", "Max", "Jacob", 20D);
+		UserAccount ua2 = new UserAccount(3L, "jiji@gmail.com", "jiji", "Max", "Jacob", 30D);
+		List<UserAccount> connections = new ArrayList<>();
+		connections.add(ua1);
+		connections.add(ua2);
+		UserAccount ua3 = new UserAccount(4L, mail, "jojo", "Max", "Jacob", 50D);
+		UserAccount ua4 = new UserAccount(5L, "jaja@gmail.com", "jaja", "Max", "Jacob", 20D);
+		UserAccount ua5 = new UserAccount(6L, "jiji@gmail.com", "jiji", "Max", "Jacob", 30D);
+		UserAccount ua6 = new UserAccount(7L, "juju@gmail.com", "juju", "Max", "Jacob", 30D);
+		List<UserAccount> listOfAllUa = new ArrayList<>();
+		listOfAllUa.add(ua3);
+		listOfAllUa.add(ua4);
+		listOfAllUa.add(ua5);
+		listOfAllUa.add(ua6);
+		lenient().when(userAccountService.retrieveConxUserAccount(sender)).thenReturn(connections);
+		lenient().when(userAccountService.findAllUserAccounts()).thenReturn(listOfAllUa);
+		// when(userAccountRepository.save(sender)).thenReturn(ua1);
+		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(ua1);
+		// Act
+		ua2 = userAccountService.deleteConxUserAccount(sender, mail);
+
+		if (ua2 != null) {
+			ret = true;
+		}
+		// Assert
+		assertTrue(ret);
+	}
+
+	@Test
+	@DisplayName("Register new UserAccount")
+	void RegisterNewUserAccount_ShouldReturnTrue() throws EmailExistsException {
+		// Arrange
+		Boolean ret = false;
+		UserAccount ua1 = new UserAccount(2L, "jaja@gmail.com", "jaja", "Max", "Jacob", 20D);
+		UserAccount ua2 = null;
+
+		when(userAccountRepository.existsByLoginMail(Mockito.anyString())).thenReturn(false);
+		when(passwordEncoder.encode(Mockito.anyString())).thenReturn("nouveauMdp");
+		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(ua1);
+		// Act
+		ua2 = userAccountService.registerNewUserAccount(null, "nouveau@gmail.com", "motdepasse", "paul", "Gauguin",
+				12D);
+		if (ua2 != null) {
+			ret = true;
+		}
+		// Assert
+		assertTrue(ret);
+	}
+
+//	@Test
+//	@DisplayName("Don't register new UserAccount")
+//	void DontRegisterNewUserAccount_ShouldReturnTrue() throws EmailExistsException {
+//		// Arrange
+//		Boolean ret = false;
+//		UserAccount ua1 = new UserAccount(2L, "jaja@gmail.com", "jaja", "Max", "Jacob", 20D);
+//		UserAccount ua2 = null;
+//
+//		when(userAccountRepository.existsByLoginMail(Mockito.anyString())).thenReturn(true);
+//		when(passwordEncoder.encode(Mockito.anyString())).thenReturn("nouveauMdp");
+////		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(ua1);
+//		// Act
+//		ua2 = userAccountService.registerNewUserAccount(null, "nouveau@gmail.com", "motdepasse", "paul", "Gauguin",
+//				12D);
+//		if (ua2 == null) {
+//			ret = true;
+//		}
+//		// Assert
+//		assertTrue(ret);
+//	}
 }
