@@ -203,7 +203,7 @@ public class UserAccountService implements IUserAccountService {
 
 		Boolean mailExists = userAccountRepository.existsByLoginMail(loginMail);
 
-		if (Boolean.TRUE.equals(mailExists)) {
+		if (mailExists) {
 			throw new EmailExistsException("There is an account with that email adress: " + loginMail);
 		}
 		UserAccount registration = new UserAccount(null, loginMail, passwordEncoder.encode(psswrd), firstName, lastName,

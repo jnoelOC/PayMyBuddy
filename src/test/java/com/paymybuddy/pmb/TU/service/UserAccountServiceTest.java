@@ -233,8 +233,6 @@ class UserAccountServiceTest {
 		listOfAllUa.add(ua5);
 		listOfAllUa.add(ua6);
 
-		lenient().when(userAccountService.retrieveConxUserAccount(sender)).thenReturn(connections);
-		lenient().when(userAccountService.findAllUserAccounts()).thenReturn(listOfAllUa);
 		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(ua1);
 
 		// Act
@@ -262,6 +260,31 @@ class UserAccountServiceTest {
 
 		lenient().when(userAccountRepository.chercherConnexions(Mockito.anyLong())).thenReturn(listOfLg);
 		when(userAccountRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(ua1));
+		// Act
+		connections = userAccountService.retrieveConxUserAccount(sender);
+		if (connections != null) {
+			ret = true;
+		}
+		// Assert
+		assertTrue(ret);
+
+	}
+
+	@Test
+	@DisplayName("Retrieve Connection UserAccount at null")
+	void RetrieveConnectionUserAccountAtNull_ShouldReturnTrue() {
+		// Arrange
+		Boolean ret = false;
+		String mail = "jojo@gmail.com";
+		UserAccount sender = new UserAccount(1L, mail, "jojo", "Max", "Jacob", 50D);
+		List<UserAccount> connections = new ArrayList<>();
+		List<Long> listOfLg = new ArrayList<>();
+		listOfLg.add(1L);
+		listOfLg.add(2L);
+		listOfLg.add(3L);
+
+		lenient().when(userAccountRepository.chercherConnexions(Mockito.anyLong())).thenReturn(listOfLg);
+		when(userAccountRepository.findById(Mockito.anyLong())).thenReturn(null);
 		// Act
 		connections = userAccountService.retrieveConxUserAccount(sender);
 		if (connections != null) {
