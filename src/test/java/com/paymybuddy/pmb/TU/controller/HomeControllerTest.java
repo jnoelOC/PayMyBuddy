@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.controller.HomeController;
 import com.paymybuddy.pmb.model.UserAccount;
@@ -47,8 +49,8 @@ class HomeControllerTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 
-//	@MockBean
-//	private UserDetails userDetails;
+	@Autowired
+	HomeController homeController = new HomeController();
 
 	@MockBean
 	private MyUserDetailsService myUserDetailsService;
@@ -110,18 +112,14 @@ class HomeControllerTest {
 		assertThat(contentAsString).isNotNull();
 	}
 
-	@Test
+	@ParameterizedTest
+	@MethodSource("HomeSource")
 	@DisplayName("Get home")
-	void whenHomeInEntry_thenReturnsNotNull() throws Exception {
+	void whenHomeInEntry_thenReturnsNotNull(String mail) throws Exception {
 		// ARRANGE
-		UserAccount ua1 = new UserAccount(1L, "admin@gmail.com",
-				"$2a$10$Yut7ko9yB0pbMMg2GaTMqOp6UtMoyhYWVqdYLk9Rk7/SOkNUA.u/y", "admin", "admin", 50D);
-//		when(userAccountRepository.findByLoginMail("admin@gmail.com")).thenReturn(ua1);
-//		UserDetails userDetails = myUserDetailsService.loadUserByUsername("admin@gmail.com");
-//		when(userDetails.getUsername()).thenReturn("admin@gmail.com");
+		UserAccount ua1 = new UserAccount(1L, mail, "$2a$10$Yut7ko9yB0pbMMg2GaTMqOp6UtMoyhYWVqdYLk9Rk7/SOkNUA.u/y",
+				"admin", "admin", 50D);
 
-//		when(principal.getName()).thenReturn("admin@gmail.com");
-		when(userAccountService.findByLoginMail("admin@gmail.com")).thenReturn(ua1);
 		class princip implements Principal {
 			@Override
 			public String getName() {
@@ -183,14 +181,60 @@ class HomeControllerTest {
 		}
 		modl m = new modl();
 
-		HomeController homeController = new HomeController();
-		homeController.home(p, m);
+//		when(m.addAttribute("sold", Mockito.any())).thenReturn(m);
+		when(userAccountService.findByLoginMail(Mockito.anyString())).thenReturn(ua1);
 
-		MvcResult result = mockMvc.perform(get("/home").param("principal", "admin@gmail.com").param("model", "11D")
-				.contentType("application/json")).andExpect(status().isOk()).andReturn();
 		// ACT
-		String contentAsString = result.getResponse().getContentAsString();
+		String ret = homeController.home(p, m);
 		// ASSERT
-		assertThat(contentAsString).isNotNull();
+		assertThat(ret).hasToString("home_page");
 	}
+
+	// with its data
+	private static Stream<Arguments> HomeSource() {
+		return Stream.of(Arguments.of("admin@gmail.com"), Arguments.of("j@gmail.com"), Arguments.of("toto@gmail.com"));
+	}
+
+	@ParameterizedTest
+	@MethodSource("RegisterTransferSource")
+	@DisplayName("Post register at transfer")
+	void whenHomeWithRegister_thenReturnsNotNull(RedirectAttributes redirectAttributes, String firstName,
+			String lastName, String loginMail, String psswrd) throws Exception {
+		// ARRANGE
+		UserAccount ua1 = new UserAccount(1L, "admin@gmail.com",
+				"$2a$10$Yut7ko9yB0pbMMg2GaTMqOp6UtMoyhYWVqdYLk9Rk7/SOkNUA.u/y", "admin", "admin", 150D);
+		when(userAccountService.registerNewUserAccount(null, loginMail, psswrd, firstName, lastName, 0D))
+				.thenReturn(ua1);
+		// ACT
+		String ret = homeController.registerUserAccount(null, loginMail, psswrd, firstName, lastName);
+		// ASSERT
+		assertThat(ret).hasToString("redirect:/transfer");
+	}
+
+	// with its data
+	private static Stream<Arguments> RegisterTransferSource() {
+		return Stream.of(Arguments.of(null, "admin", "admin", "admin@gmail.com",
+				"$2a$10$Yut7ko9yB0pbMMg2GaTMqOp6UtMoyhYWVqdYLk9Rk7/SOkNUA.u/y"));
+	}
+
+	@ParameterizedTest
+	@MethodSource("RegisterIndexSource")
+	@DisplayName("Post register at index")
+	void whenHomeWithRegister_thenReturnsNull(RedirectAttributes redirectAttributes, String firstName, String lastName,
+			String loginMail, String psswrd) throws Exception {
+		// ARRANGE
+//		UserAccount ua1 = null;
+//		when(userAccountService.registerNewUserAccount(null, loginMail, psswrd, firstName, lastName, 0D))
+//				.thenReturn(ua1);
+		// ACT
+		String ret = homeController.registerUserAccount(null, loginMail, psswrd, firstName, lastName);
+		// ASSERT
+		assertThat(ret).hasToString("redirect:/transfer");
+	}
+
+	// with its data
+	private static Stream<Arguments> RegisterIndexSource() {
+		return Stream.of(Arguments.of(null, "tito", "tito", "tito@gmail.com", "tito"));
+	}
+
 }
