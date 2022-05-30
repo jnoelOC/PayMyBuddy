@@ -51,10 +51,7 @@ public class TransacController {
 		List<String> connections = new ArrayList<>();
 		try {
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
-			/*
-			 * Optional<UserAccount> toto = userAccountService.findById(1L); if
-			 * (toto.isPresent()) { UserAccount toto2 = toto.get(); }
-			 */
+
 			lua = userAccountService.retrieveConxUserAccount(sender);
 			for (UserAccount usac : lua) {
 				connections.add(usac.getLoginMail());
@@ -65,12 +62,6 @@ public class TransacController {
 
 		return connections;
 	}
-
-//	@ModelAttribute("transacs")
-//	public List<Transac> getTransacs() {
-//		String emailUserConnected = SecurityContextHolder.getContext().getAuthentication().getName();
-//		return transacService.findAllTransactionsByGiver(emailUserConnected);
-//	}
 
 	@GetMapping("/transfer")
 	public String transferGet(Model model) {
