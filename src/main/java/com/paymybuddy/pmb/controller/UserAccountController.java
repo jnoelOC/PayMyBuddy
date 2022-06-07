@@ -8,6 +8,13 @@ import org.springframework.stereotype.Controller;
 import com.paymybuddy.pmb.service.impl.TransacService;
 import com.paymybuddy.pmb.service.impl.UserAccountService;
 
+/**
+ * 
+ * This class realize all the controller operation on UserAccount.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
 @Controller
 public class UserAccountController {
 

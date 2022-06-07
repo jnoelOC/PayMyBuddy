@@ -15,6 +15,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.service.impl.UserAccountService;
 
+/**
+ * 
+ * This class realize all the controller operation on Home.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
 @Controller
 public class HomeController {
 

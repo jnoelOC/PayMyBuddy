@@ -284,7 +284,8 @@ class UserAccountServiceTest {
 		listOfLg.add(3L);
 
 		lenient().when(userAccountRepository.chercherConnexions(Mockito.anyLong())).thenReturn(listOfLg);
-		when(userAccountRepository.findById(Mockito.anyLong())).thenReturn(null);
+		Optional<UserAccount> userTest = Optional.ofNullable(null);
+		when(userAccountRepository.findById(Mockito.anyLong())).thenReturn(userTest);
 		// Act
 		connections = userAccountService.retrieveConxUserAccount(sender);
 		if (connections != null) {
@@ -390,9 +391,7 @@ class UserAccountServiceTest {
 		listOfAllUa.add(ua4);
 		listOfAllUa.add(ua5);
 		listOfAllUa.add(ua6);
-		lenient().when(userAccountService.retrieveConxUserAccount(sender)).thenReturn(connections);
-		lenient().when(userAccountService.findAllUserAccounts()).thenReturn(listOfAllUa);
-		// when(userAccountRepository.save(sender)).thenReturn(ua1);
+
 		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(ua1);
 		// Act
 		ua2 = userAccountService.deleteConxUserAccount(sender, mail);
@@ -425,24 +424,4 @@ class UserAccountServiceTest {
 		assertTrue(ret);
 	}
 
-//	@Test
-//	@DisplayName("Don't register new UserAccount")
-//	void DontRegisterNewUserAccount_ShouldReturnTrue() throws EmailExistsException {
-//		// Arrange
-//		Boolean ret = false;
-//		UserAccount ua1 = new UserAccount(2L, "jaja@gmail.com", "jaja", "Max", "Jacob", 20D);
-//		UserAccount ua2 = null;
-//
-//		when(userAccountRepository.existsByLoginMail(Mockito.anyString())).thenReturn(true);
-//		when(passwordEncoder.encode(Mockito.anyString())).thenReturn("nouveauMdp");
-////		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(ua1);
-//		// Act
-//		ua2 = userAccountService.registerNewUserAccount(null, "nouveau@gmail.com", "motdepasse", "paul", "Gauguin",
-//				12D);
-//		if (ua2 == null) {
-//			ret = true;
-//		}
-//		// Assert
-//		assertTrue(ret);
-//	}
 }

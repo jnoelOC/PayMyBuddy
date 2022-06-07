@@ -254,7 +254,7 @@ class BankAccountControllerTest {
 	void whenAddSold_thenReturnsNotNull(Principal principal, Integer sold) {
 		// ARRANGE
 		// ACT
-		String ret = bankAccountController.addSoldGet(principal, sold);
+		String ret = bankAccountController.addSoldPost(principal, sold);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 	}
@@ -278,7 +278,7 @@ class BankAccountControllerTest {
 	void whenAddSold_thenReturnsNull(Principal principal, Integer sold) {
 		// ARRANGE
 		// ACT
-		String ret = bankAccountController.addSoldGet(principal, sold);
+		String ret = bankAccountController.addSoldPost(principal, sold);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 	}
@@ -303,7 +303,7 @@ class BankAccountControllerTest {
 	void whenSubstractSold_thenReturnsNotNull(Principal principal, Integer sold) {
 		// ARRANGE
 		// ACT
-		String ret = bankAccountController.substractSoldGet(principal, sold);
+		String ret = bankAccountController.substractSoldPost(principal, sold);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 	}
@@ -327,7 +327,7 @@ class BankAccountControllerTest {
 	void whenSubstractSold_thenReturnsNull(Principal principal, Integer sold) {
 		// ARRANGE
 		// ACT
-		String ret = bankAccountController.substractSoldGet(principal, sold);
+		String ret = bankAccountController.substractSoldPost(principal, sold);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 	}

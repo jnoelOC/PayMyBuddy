@@ -29,5 +29,5 @@ spring.sql.init.mode=always
 spring.jpa.defer-datasource-initialization=false
 
 
-It will create a database with tables and populate it with data.
+It will create a database with tables and populate it with data, from schema.sql and data.sql in resources folder.
 

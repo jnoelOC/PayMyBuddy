@@ -17,6 +17,13 @@ import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.service.impl.BankAccountService;
 import com.paymybuddy.pmb.service.impl.UserAccountService;
 
+/**
+ * 
+ * This class realize all the controller operation on BankAccount.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
 @Controller
 public class BankAccountController {
 	public static final Logger logger = LogManager.getLogger(BankAccountController.class);
@@ -28,7 +35,7 @@ public class BankAccountController {
 	UserAccountService userAccountService;
 
 	@PostMapping("/bank/addSold")
-	public String addSoldGet(Principal principal,
+	public String addSoldPost(Principal principal,
 			@RequestParam(value = "sold", name = "sold", required = false) Integer sold) {
 		try {
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
@@ -37,20 +44,20 @@ public class BankAccountController {
 			bankAccountService.addSold(bankAccount, sender, sold);
 
 		} catch (Exception ex) {
-			logger.error("Error dans addSoldGet : %s ", ex.getMessage());
+			logger.error("Error dans addSoldPost : " + ex.getMessage());
 		}
 		return "redirect:/transfer";
 	}
 
 	@PostMapping("/bank/substractSold")
-	public String substractSoldGet(Principal principal,
+	public String substractSoldPost(Principal principal,
 			@RequestParam(value = "sold", name = "sold", required = false) Integer sold) {
 		try {
 			BankAccount bankAccount = bankAccountService.findByLoginMail(principal.getName());
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
 			bankAccountService.substractSold(bankAccount, sender, sold);
 		} catch (Exception ex) {
-			logger.error("Error dans substractSoldGet : %s ", ex.getMessage());
+			logger.error("Error dans substractSoldPost : " + ex.getMessage());
 		}
 		return "redirect:/transfer";
 	}
@@ -93,56 +100,9 @@ public class BankAccountController {
 			bankAccountService.deleteBankAccount(baOfUser);
 
 		} catch (Exception ex) {
-			logger.error("Error dans deleteBank : %s ", ex.getMessage());
+			logger.error("Error dans deleteBank : " + ex.getMessage());
 		}
 		return "bank_page";
 	}
 
-//	@GetMapping("/bankaccounts")
-//	public List<BankAccount> findAllBankAccounts() {
-//
-//		List<BankAccount> lba = bankAccountService.findAllBankAccounts();
-//
-//		if (lba.isEmpty()) {
-//			logger.error("Erreur dans Find all bankAccounts : status Non trouvé.");
-//			return null;
-//		}
-//		logger.info("bankAccounts trouvés.");
-//		return lba;
-//	}
-//
-//	@PostMapping("/bankaccount/create")
-//	public ResponseEntity<BankAccount> createBankAccount(@RequestBody BankAccount bankAccount) {
-//
-//		BankAccount ba = bankAccountService.saveBankAccount(bankAccount);
-//
-//		if (ba.getId() <= 0) {
-//			logger.error("Erreur dans create bankAccount : status No PK.");
-//			return new ResponseEntity<>(ba, HttpStatus.NOT_FOUND);
-//		}
-//		logger.info("bankAccount trouvé.");
-//		return new ResponseEntity<>(ba, HttpStatus.CREATED);
-//	}
-//
-//	@PutMapping("/bankaccount/update")
-//	public ResponseEntity<BankAccount> updateUserAccount(@RequestBody BankAccount bankAccount) {
-//
-//		BankAccount ba = bankAccountService.saveBankAccount(bankAccount);
-//
-//		if (ba.getId() <= 0) {
-//			logger.error("Erreur dans update bankAccount : status No PK.");
-//			return new ResponseEntity<>(ba, HttpStatus.NOT_FOUND);
-//		}
-//		logger.info("bankAccount mis à jour.");
-//		return new ResponseEntity<>(ba, HttpStatus.OK);
-//	}
-//
-//	@DeleteMapping("/bankaccount/delete")
-//	public ResponseEntity<org.springframework.http.HttpStatus> deleteBankAccount(@RequestBody BankAccount bankAccount) {
-//
-//		bankAccountService.deleteBankAccount(bankAccount);
-//
-//		logger.info("bankAccount supprimé.");
-//		return new ResponseEntity<>(HttpStatus.OK);
-//	}
 }

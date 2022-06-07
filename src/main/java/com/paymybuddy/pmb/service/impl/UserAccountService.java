@@ -18,6 +18,13 @@ import com.paymybuddy.pmb.repository.ITransacRepository;
 import com.paymybuddy.pmb.repository.IUserAccountRepository;
 import com.paymybuddy.pmb.service.IUserAccountService;
 
+/**
+ * 
+ * This class realize all the operation on UserAccount.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
 @Service
 public class UserAccountService implements IUserAccountService {
 
@@ -32,18 +39,36 @@ public class UserAccountService implements IUserAccountService {
 	@Autowired
 	private ITransacRepository transacRepository;
 
+	/*
+	 * This method gives a list of all UserAccount
+	 * 
+	 * @return A list of UserAccount
+	 * 
+	 */
 	public List<UserAccount> findAllUserAccounts() {
 		return userAccountRepository.findAll();
 	}
 
+	/*
+	 * This method gives a UserAccount in according to loginMail
+	 * 
+	 * @param A String parameter as loginMail
+	 * 
+	 * @return A UserAccount
+	 * 
+	 */
 	public UserAccount findByLoginMail(String user) {
 		return userAccountRepository.findByLoginMail(user);
 	}
 
-//	public UserAccount getById(Long id) {
-//		return userAccountRepository.getById(id);
-//	}
-
+	/*
+	 * This method finds a UserAccount in according to id
+	 * 
+	 * @param A Long parameter as id
+	 * 
+	 * @return A optional UserAccount
+	 * 
+	 */
 	public Optional<UserAccount> findById(Long id) {
 		UserAccount ua1 = new UserAccount(1L, "jojo@gmail.com", "jojo", "Max", "Jacob", 50D);
 
@@ -54,6 +79,14 @@ public class UserAccountService implements IUserAccountService {
 		return userAccountRepository.findById(id);
 	}
 
+	/*
+	 * This method saves a UserAccount
+	 * 
+	 * @param A UserAccount parameter as userAccount
+	 * 
+	 * @return A UserAccount
+	 * 
+	 */
 	@Transactional
 	public UserAccount saveUserAccount(UserAccount userAccount) {
 
@@ -65,6 +98,16 @@ public class UserAccountService implements IUserAccountService {
 		return userAccountRepository.save(userAccount);
 	}
 
+	/*
+	 * This method adds some connection to a UserAccount
+	 * 
+	 * @param A UserAccount parameter as sender
+	 * 
+	 * @param A Long parameter as idOfReceiver
+	 * 
+	 * @return A UserAccount
+	 * 
+	 */
 	@Transactional
 	public UserAccount addConxUserAccount(UserAccount sender, Long idOfReceiver) {
 
@@ -92,6 +135,14 @@ public class UserAccountService implements IUserAccountService {
 		return userAccountRepository.save(sender);
 	}
 
+	/*
+	 * This method retrieves some connections from a UserAccount
+	 * 
+	 * @param A UserAccount parameter as sender
+	 * 
+	 * @return A list of UserAccount
+	 * 
+	 */
 	@Transactional
 	public List<UserAccount> retrieveConxUserAccount(UserAccount sender) {
 
@@ -115,6 +166,20 @@ public class UserAccountService implements IUserAccountService {
 		return connections;
 	}
 
+	/*
+	 * This method transfers money from a UserAccount to a another UserAccount
+	 * 
+	 * @param A String parameter as loginMail of sender
+	 * 
+	 * @param A String parameter as receiverMail
+	 * 
+	 * @param A String parameter as description
+	 * 
+	 * @param A Double parameter as amount
+	 * 
+	 * @return A Transac
+	 * 
+	 */
 	@Transactional(rollbackFor = { SQLException.class })
 	public Transac transferMoneyUserAccount(String loginMail, String receiverMail, String description, Double amount)
 			throws SQLException {
@@ -152,6 +217,18 @@ public class UserAccountService implements IUserAccountService {
 		return transacRepository.save(transac);
 	}
 
+	/*
+	 * This method computes new sold to BankAccount of admin
+	 * 
+	 * @param A Double parameter as soldSender
+	 * 
+	 * @param A Double parameter as amount
+	 * 
+	 * @param A Double parameter as littleAmount (discount)
+	 * 
+	 * @return A new sold in Double
+	 * 
+	 */
 	@Transactional
 	public Double computeNewSoldToBankAdmin(Double soldSender, Double amount, Double littleAmount) {
 
@@ -166,11 +243,27 @@ public class UserAccountService implements IUserAccountService {
 		return soldSender - amount - littleAmount;
 	}
 
+	/*
+	 * This method deletes a UserAccount
+	 * 
+	 * @param A UserAccount parameter as userAccount
+	 * 
+	 */
 	@Transactional
 	public void deleteUserAccount(UserAccount userAccount) {
 		userAccountRepository.delete(userAccount);
 	}
 
+	/*
+	 * This method deletes some connection to a UserAccount
+	 * 
+	 * @param A UserAccount parameter as sender
+	 * 
+	 * @param A String parameter as receiverMail
+	 * 
+	 * @return A UserAccount
+	 * 
+	 */
 	@Transactional
 	public UserAccount deleteConxUserAccount(UserAccount sender, String receiverMail) {
 
@@ -198,6 +291,24 @@ public class UserAccountService implements IUserAccountService {
 		return userAccountRepository.save(sender);
 	}
 
+	/*
+	 * This method registers a new UserAccount
+	 * 
+	 * @param A Long parameter as id
+	 * 
+	 * @param A String parameter as loginMail
+	 * 
+	 * @param A String parameter as psswrd
+	 * 
+	 * @param A String parameter as firstName
+	 * 
+	 * @param A String parameter as lastName
+	 * 
+	 * @param A Double parameter as sold
+	 * 
+	 * @return A UserAccount
+	 * 
+	 */
 	public UserAccount registerNewUserAccount(Long id, String loginMail, String psswrd, String firstName,
 			String lastName, Double sold) throws EmailExistsException {
 

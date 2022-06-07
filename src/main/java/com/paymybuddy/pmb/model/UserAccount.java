@@ -16,6 +16,13 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * 
+ * This class realize an entity of UserAccount.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
 @Entity
 @Table(name = "user_account")
 @JsonIgnoreProperties(value = { "connections" })

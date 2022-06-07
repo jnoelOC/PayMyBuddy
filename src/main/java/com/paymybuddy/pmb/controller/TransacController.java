@@ -23,6 +23,13 @@ import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.service.impl.TransacService;
 import com.paymybuddy.pmb.service.impl.UserAccountService;
 
+/**
+ * 
+ * This class realize all the controller operation on Transac.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
 @Controller
 public class TransacController {
 	public static final Logger logger = LogManager.getLogger(TransacController.class);
@@ -136,7 +143,7 @@ public class TransacController {
 			// Ajouter une connexion à la liste des connexions du sender
 			UserAccount ua = userAccountService.addConxUserAccount(sender, receiver.getId());
 		} catch (Exception ex) {
-			logger.error("Error dans AddConnectionPost : %s ", ex.getMessage());
+			logger.error("Error dans AddConnectionPost : " + ex.getMessage());
 		}
 		return "redirect:/transfer";
 	}
@@ -150,7 +157,7 @@ public class TransacController {
 			// Ajouter une connexion à la liste des connexions du sender
 			userAccountService.deleteConxUserAccount(sender, connectionMail);
 		} catch (Exception ex) {
-			logger.error("Error dans AddConnectionPost : %s ", ex.getMessage());
+			logger.error("Error dans deleteConnectionGet : " + ex.getMessage());
 		}
 		return "redirect:/transfer";
 	}

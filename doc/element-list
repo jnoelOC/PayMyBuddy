@@ -1,0 +1,10 @@
+com.paymybuddy.pmb
+com.paymybuddy.pmb.configuration
+com.paymybuddy.pmb.controller
+com.paymybuddy.pmb.model
+com.paymybuddy.pmb.repository
+com.paymybuddy.pmb.service
+com.paymybuddy.pmb.service.impl
+com.paymybuddy.pmb.TI.Controller
+com.paymybuddy.pmb.TU.controller
+com.paymybuddy.pmb.TU.service

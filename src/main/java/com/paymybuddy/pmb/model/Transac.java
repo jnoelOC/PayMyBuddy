@@ -7,6 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * 
+ * This class realize an entity of Transac.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
 @Entity
 @Table(name = "transac")
 public class Transac {

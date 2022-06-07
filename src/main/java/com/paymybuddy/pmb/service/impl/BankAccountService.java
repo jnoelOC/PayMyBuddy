@@ -13,6 +13,14 @@ import com.paymybuddy.pmb.model.UserAccount;
 import com.paymybuddy.pmb.repository.IBankAccountRepository;
 import com.paymybuddy.pmb.repository.IUserAccountRepository;
 
+/**
+ * 
+ * This class realize all the operation on BankAccount.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
+
 @Service
 public class BankAccountService {
 	public static final Logger logger = LogManager.getLogger(BankAccountService.class);
@@ -23,14 +31,38 @@ public class BankAccountService {
 	@Autowired
 	private IUserAccountRepository userAccountRepository;
 
+	/*
+	 * This method gives a list of all BankAccount
+	 * 
+	 * @return a list of BankAccount
+	 * 
+	 */
 	public List<BankAccount> findAllBankAccounts() {
 		return bankAccountRepository.findAll();
 	}
 
+	/*
+	 * This method gives a BankAccount in according to a loginMail
+	 * 
+	 * @param A string parameter as loginMail
+	 * 
+	 * @return a BankAccount
+	 * 
+	 */
 	public BankAccount findByLoginMail(String user) {
 		return bankAccountRepository.findByLoginMail(user);
 	}
 
+	/*
+	 * This method add a sold to a BankAccount for a sender
+	 * 
+	 * @param A Integer parameter as sold
+	 * 
+	 * @param A UserAccount parameter as sender
+	 * 
+	 * @param A BankAccount parameter as bankAccount
+	 * 
+	 */
 	public void addSold(BankAccount bankAccount, UserAccount sender, Integer sold) {
 		try {
 			if (!bankAccount.getIban().isEmpty()) {
@@ -46,6 +78,16 @@ public class BankAccountService {
 		}
 	}
 
+	/*
+	 * This method substract a sold to a BankAccount for a sender
+	 * 
+	 * @param A Integer parameter as sold
+	 * 
+	 * @param A UserAccount parameter as sender
+	 * 
+	 * @param A BankAccount parameter as bankAccount
+	 * 
+	 */
 	public void substractSold(BankAccount bankAccount, UserAccount sender, Integer sold) {
 		try {
 			if (!bankAccount.getIban().isEmpty()) {
@@ -62,17 +104,47 @@ public class BankAccountService {
 		}
 	}
 
+	/*
+	 * This method saves a BankAccount
+	 * 
+	 * @param A BankAccount parameter as bankAccount
+	 * 
+	 * @return A BankAccount
+	 * 
+	 */
 	@Transactional
 	public BankAccount saveBankAccount(BankAccount bankAccount) {
 
 		return bankAccountRepository.save(bankAccount);
 	}
 
+	/*
+	 * This method deletes a BankAccount
+	 * 
+	 * @param A BankAccount parameter as bankAccount
+	 * 
+	 */
 	@Transactional
 	public void deleteBankAccount(BankAccount bankAccount) {
 		bankAccountRepository.delete(bankAccount);
 	}
 
+	/*
+	 * This method registers a new BankAccount
+	 * 
+	 * @param A Long parameter as id
+	 * 
+	 * @param A String parameter as bankName
+	 * 
+	 * @param A String parameter as iban
+	 * 
+	 * @param A String parameter as bic
+	 * 
+	 * @param A String parameter as loginMail
+	 * 
+	 * @return A BankAccount
+	 * 
+	 */
 	public BankAccount registerNewBank(Long id, String bankName, String iban, String bic, String loginMail)
 			throws IbanExistsException {
 

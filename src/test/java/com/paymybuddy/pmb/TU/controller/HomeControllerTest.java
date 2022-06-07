@@ -2,8 +2,6 @@ package com.paymybuddy.pmb.TU.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.security.Principal;
 import java.util.Collection;
@@ -26,7 +24,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import org.springframework.web.context.WebApplicationContext;
@@ -69,47 +66,46 @@ class HomeControllerTest {
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
 
-	@ParameterizedTest
-	@MethodSource("EntrySource")
-	@DisplayName("Get slash and index and login")
-	void whenSlashInEntry_thenReturnsNotNull(String entry) throws Exception {
+	@Test
+	@DisplayName("Get slash and index")
+	void whenSlashInEntry_thenReturnsNotNull() throws Exception {
 		// ARRANGE
-		MvcResult result = mockMvc.perform(get(entry).contentType("application/json")).andExpect(status().isOk())
-				.andReturn();
 		// ACT
-		String contentAsString = result.getResponse().getContentAsString();
+		String ret = homeController.mainIndex();
 		// ASSERT
-		assertThat(contentAsString).isNotNull();
+		assertThat(ret).hasToString("index");
 
 	}
 
-	// with its data
-	private static Stream<Arguments> EntrySource() {
-		return Stream.of(Arguments.of("/"), Arguments.of("/index"), Arguments.of("/login"));
+	@Test
+	@DisplayName("Get login")
+	void whenLoginInEntry_thenReturnsNotNull() throws Exception {
+		// ARRANGE
+		// ACT
+		String ret = homeController.login();
+		// ASSERT
+		assertThat(ret).hasToString("login_page");
+
 	}
 
 	@Test
 	@DisplayName("Get logout")
 	void whenLogoutInEntry_thenReturnsNotNull() throws Exception {
 		// ARRANGE
-		MvcResult result = mockMvc.perform(get("/logout").contentType("application/json")).andExpect(status().isOk())
-				.andReturn();
 		// ACT
-		String contentAsString = result.getResponse().getContentAsString();
+		String ret = homeController.logout();
 		// ASSERT
-		assertThat(contentAsString).isNotNull();
+		assertThat(ret).hasToString("index");
 	}
 
 	@Test
 	@DisplayName("Get register")
 	void whenRegisterInEntry_thenReturnsNotNull() throws Exception {
 		// ARRANGE
-		MvcResult result = mockMvc.perform(get("/register").contentType("application/json")).andExpect(status().isOk())
-				.andReturn();
 		// ACT
-		String contentAsString = result.getResponse().getContentAsString();
+		String ret = homeController.register();
 		// ASSERT
-		assertThat(contentAsString).isNotNull();
+		assertThat(ret).hasToString("register_page");
 	}
 
 	@ParameterizedTest
@@ -120,65 +116,8 @@ class HomeControllerTest {
 		UserAccount ua1 = new UserAccount(1L, mail, "$2a$10$Yut7ko9yB0pbMMg2GaTMqOp6UtMoyhYWVqdYLk9Rk7/SOkNUA.u/y",
 				"admin", "admin", 50D);
 
-		class princip implements Principal {
-			@Override
-			public String getName() {
-				return "j@gmail.com";
-			}
-		}
 		princip p = new princip();
 
-		class modl implements Model {
-
-			@Override
-			public Model addAttribute(String attributeName, Object attributeValue) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public Model addAttribute(Object attributeValue) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public Model addAllAttributes(Collection<?> attributeValues) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public Model addAllAttributes(Map<String, ?> attributes) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public Model mergeAttributes(Map<String, ?> attributes) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public boolean containsAttribute(String attributeName) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public Object getAttribute(String attributeName) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public Map<String, Object> asMap() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-		}
 		modl m = new modl();
 
 //		when(m.addAttribute("sold", Mockito.any())).thenReturn(m);
@@ -237,4 +176,63 @@ class HomeControllerTest {
 		return Stream.of(Arguments.of(null, "tito", "tito", "tito@gmail.com", "tito"));
 	}
 
+}
+
+class modl implements Model {
+
+	@Override
+	public Model addAttribute(String attributeName, Object attributeValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Model addAttribute(Object attributeValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Model addAllAttributes(Collection<?> attributeValues) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Model addAllAttributes(Map<String, ?> attributes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Model mergeAttributes(Map<String, ?> attributes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean containsAttribute(String attributeName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object getAttribute(String attributeName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> asMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
+
+class princip implements Principal {
+	@Override
+	public String getName() {
+		return "j@gmail.com";
+	}
 }

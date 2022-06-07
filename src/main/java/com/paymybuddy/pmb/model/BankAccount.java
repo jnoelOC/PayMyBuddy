@@ -7,6 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * 
+ * This class realize an entity of BankAccount.
+ * 
+ * @author jean-noel.chambe
+ * 
+ */
 @Entity
 @Table(name = "bank_account")
 public class BankAccount {
