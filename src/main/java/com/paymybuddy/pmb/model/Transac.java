@@ -31,10 +31,6 @@ public class Transac {
 	@Column(name = "RECEIVER", length = 50)
 	private String receiver;
 
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "id", updatable = false, insertable = false)
-//	private UserAccount userAccount;
-
 	public Transac() {
 	}
 
@@ -45,14 +41,6 @@ public class Transac {
 		this.giver = giver;
 		this.receiver = receiver;
 	}
-
-//	public UserAccount getUserAccount() {
-//		return userAccount;
-//	}
-//
-//	public void setUserAccount(UserAccount userAccount) {
-//		this.userAccount = userAccount;
-//	}
 
 	public Long getIdTransaction() {
 		return id;

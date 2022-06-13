@@ -24,15 +24,8 @@ public interface IUserAccountRepository extends JpaRepository<UserAccount, Long>
 	// public BankAccount getUserByIban(String iban);
 
 	UserAccount getById(Long id);
-//	List<UserAccount> findByLoginMail(String loginMail);
 
-//	@Query(nativeQuery = true, value = "SELECT * FROM connection c, useraccount u WHERE :x = c.id_ua_pk")
-//	@Query(nativeQuery = true, value = "SELECT * FROM connection c")
 	@Query(nativeQuery = true, value = "SELECT connection_id FROM connection c WHERE c.id = :x")
 	public List<Long> chercherConnexions(@Param("x") Long idConnx);
-//	public Page<Long> chercherConnexions(@Param("x") Long idConnx, Pageable pageable);
-//	List<UserAccount> findByConnections(List<UserAccount> connections);
-
-//	public Page<Connection> findByConnectionsWithPagination(String nombreParPage, Pageable pageable);
 
 }
