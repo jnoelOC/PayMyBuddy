@@ -6,7 +6,7 @@ This is READ.me file of PayMyBuddy application.
 
 - The safe command in a terminal to run application is :
 
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.datasource.username=%username% --spring.datasource.password=%password%"
+mvn spring-boot:run "-Dspring-boot.run.arguments='--spring.datasource.username=%username%' '--spring.datasource.password=%password%'"
 
 by replacing %username% and %password% by your credentials.
 

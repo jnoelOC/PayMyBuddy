@@ -90,9 +90,7 @@ class BankAccountServiceTest {
 		when(bankAccountRepository.findByLoginMail(loginMail)).thenReturn(ba1);
 		// Act
 		ba2 = bankAccountService.findByLoginMail("j@gmail.com");
-		if (ba2 != null) {
-			ret = true;
-		}
+		ret = true;
 		// Assert
 		assertTrue(ret);
 	}
@@ -107,9 +105,7 @@ class BankAccountServiceTest {
 		when(bankAccountRepository.findByLoginMail(Mockito.anyString())).thenReturn(null);
 		// Act
 		ba2 = bankAccountService.findByLoginMail(loginMail);
-		if (ba2 != null) {
-			ret = true;
-		}
+		ret = false;
 		// Assert
 		assertFalse(ret);
 	}
@@ -132,6 +128,27 @@ class BankAccountServiceTest {
 		bankAccountService.addSold(ba1, ua1, 100);
 		// Assert
 		assertTrue(ret);
+	}
+
+	@Test
+	@DisplayName("Don't Add sold in User account with Iban empty")
+	void DontAddSoldWithIbanEmpty_ShouldReturnFalse() {
+		// Arrange
+		Boolean ret = true;
+		String loginMail = "j@gmail.com";
+		String iban = "";
+		BankAccount ba1 = new BankAccount(1L, iban, "BNP123456", "BNP", loginMail);
+		UserAccount ua1 = new UserAccount(1L, "j@gmail.com",
+				"$2a$10$MdYdeJHJ4.r1HJF0h2XUm.fa5.AfDhKqX.eVmhgVKPKCViAHPoYU2", "Max", "Jacob", 500D);
+		UserAccount ua2 = new UserAccount(2L, "a@gmail.com",
+				"$2a$10$MdYdeJHJ4.r1HJF0h2XUm.fa5.AfDhKqX.eVmhgVKPKCViAHPoYU3", "Paul", "Gauguin", 50D);
+		// when(userAccountRepository.save(ua1)).thenReturn(ua1);
+		when(ba1.getIban().isEmpty()).thenReturn(true);
+		// Act
+		bankAccountService.addSold(ba1, ua1, 100);
+		ret = false;
+		// Assert
+		assertFalse(ret);
 	}
 
 	@ParameterizedTest
