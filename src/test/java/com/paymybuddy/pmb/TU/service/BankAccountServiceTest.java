@@ -1,5 +1,6 @@
 package com.paymybuddy.pmb.TU.service;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.lenient;
@@ -137,13 +138,12 @@ class BankAccountServiceTest {
 		Boolean ret = true;
 		String loginMail = "j@gmail.com";
 		String iban = "";
-		BankAccount ba1 = new BankAccount(1L, iban, "BNP123456", "BNP", loginMail);
+		BankAccount ba1 = new BankAccount(1L, "BNP", iban, "BNP123456", loginMail);
 		UserAccount ua1 = new UserAccount(1L, "j@gmail.com",
 				"$2a$10$MdYdeJHJ4.r1HJF0h2XUm.fa5.AfDhKqX.eVmhgVKPKCViAHPoYU2", "Max", "Jacob", 500D);
 		UserAccount ua2 = new UserAccount(2L, "a@gmail.com",
 				"$2a$10$MdYdeJHJ4.r1HJF0h2XUm.fa5.AfDhKqX.eVmhgVKPKCViAHPoYU3", "Paul", "Gauguin", 50D);
-		// when(userAccountRepository.save(ua1)).thenReturn(ua1);
-		when(ba1.getIban().isEmpty()).thenReturn(true);
+//		when(ba1.getIban().isEmpty()).thenReturn(true);
 		// Act
 		bankAccountService.addSold(ba1, ua1, 100);
 		ret = false;
@@ -201,6 +201,24 @@ class BankAccountServiceTest {
 	// with its data
 	private static Stream<Arguments> SoldInSource() {
 		return Stream.of(Arguments.of(0), Arguments.of(Integer.MIN_VALUE));
+	}
+
+	@Test
+	@DisplayName("Don't substract sold in User account with iban empty")
+	void DontSubstractSold_ShouldReturnFalse() {
+		// Arrange
+		Boolean ret = false;
+		String loginMail = "j@gmail.com";
+		String iban = "";
+		BankAccount ba1 = new BankAccount(1L, "BNP", iban, "BNP123456", loginMail);
+		UserAccount ua1 = new UserAccount(1L, "j@gmail.com",
+				"$2a$10$MdYdeJHJ4.r1HJF0h2XUm.fa5.AfDhKqX.eVmhgVKPKCViAHPoYU2", "Max", "Jacob", 500D);
+		UserAccount ua2 = new UserAccount(2L, "a@gmail.com",
+				"$2a$10$MdYdeJHJ4.r1HJF0h2XUm.fa5.AfDhKqX.eVmhgVKPKCViAHPoYU3", "Paul", "Gauguin", 50D);
+		// Act
+		bankAccountService.substractSold(ba1, ua1, 100);
+		// Assert
+		assertFalse(ret);
 	}
 
 	@Test
@@ -279,5 +297,18 @@ class BankAccountServiceTest {
 		}
 		// Assert
 		assertTrue(ret);
+	}
+
+	@Test
+	@DisplayName("Register new BankAccount with iban existing")
+	void RegisterNewBankAccountWhenIbanExists_ShouldReturnThrow() throws IbanExistsException {
+		// Arrange
+		String iban = "12345678901234567890123";
+		when(bankAccountRepository.existsByIban(Mockito.anyString())).thenReturn(true);
+		// Act
+		// Assert
+		IbanExistsException iee = assertThrows(IbanExistsException.class,
+				() -> bankAccountService.registerNewBank(1L, "BNP", iban, "BNP123456", "j@gmail.com"));
+
 	}
 }

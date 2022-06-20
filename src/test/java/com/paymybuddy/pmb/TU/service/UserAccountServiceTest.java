@@ -215,25 +215,37 @@ class UserAccountServiceTest {
 	void AddConnectionUserAccount_ShouldReturnTrue() {
 		// Arrange
 		Boolean ret = false;
-		Long idOfReceiver = 2L;
+		Long idOfReceiver = 8L;
 		String mail = "jojo@gmail.com";
 		UserAccount sender = new UserAccount(1L, mail, "jojo", "Max", "Jacob", 50D);
 		UserAccount ua1 = new UserAccount(2L, "jaja@gmail.com", "jaja", "Max", "Jacob", 20D);
 		UserAccount ua2 = new UserAccount(3L, "jiji@gmail.com", "jiji", "Max", "Jacob", 30D);
 		List<UserAccount> connections = new ArrayList<>();
-		connections.add(ua1);
-		connections.add(ua2);
+		List<UserAccount> listOfSenderConx = new ArrayList<>();
+		listOfSenderConx.add(ua1);
+		listOfSenderConx.add(ua2);
 		UserAccount ua3 = new UserAccount(4L, mail, "jojo", "Max", "Jacob", 50D);
 		UserAccount ua4 = new UserAccount(5L, "jaja@gmail.com", "jaja", "Max", "Jacob", 20D);
 		UserAccount ua5 = new UserAccount(6L, "jiji@gmail.com", "jiji", "Max", "Jacob", 30D);
 		UserAccount ua6 = new UserAccount(7L, "juju@gmail.com", "juju", "Max", "Jacob", 30D);
+		UserAccount ua9 = new UserAccount(8L, "joujou@gmail.com", "joujou", "Maxou", "Jacobou", 42D);
+
+		Optional<UserAccount> ua8 = Optional
+				.ofNullable(new UserAccount(8L, "joujou@gmail.com", "joujou", "Maxou", "Jacobou", 40D));
+
 		List<UserAccount> listOfAllUa = new ArrayList<>();
 		listOfAllUa.add(ua3);
 		listOfAllUa.add(ua4);
 		listOfAllUa.add(ua5);
 		listOfAllUa.add(ua6);
-
-		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(ua1);
+		listOfAllUa.add(ua9);
+		List<Long> listOfLg = new ArrayList<>();
+		listOfLg.add(2L);
+		listOfLg.add(3L);
+		when(userAccountRepository.chercherConnexions(Mockito.anyLong())).thenReturn(listOfLg);
+		when(userAccountRepository.findAll()).thenReturn(listOfAllUa);
+		when(userAccountRepository.findById(Mockito.anyLong())).thenReturn(ua8);
+		when(userAccountRepository.save(Mockito.any(UserAccount.class))).thenReturn(sender);
 
 		// Act
 		ua2 = userAccountService.addConxUserAccount(sender, idOfReceiver);
