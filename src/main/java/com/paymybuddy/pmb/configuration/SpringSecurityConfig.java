@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.paymybuddy.pmb.service.impl.MyUserDetailsService;
 
@@ -35,7 +36,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated();
 		http.formLogin().loginPage("/index").permitAll().loginProcessingUrl("/login").defaultSuccessUrl("/home", true)
 				.failureUrl("/login_page.html");
-		http.logout().logoutUrl("/index").invalidateHttpSession(true).deleteCookies("JSESSIONID");
+		http.logout().logoutUrl("/index").invalidateHttpSession(true).clearAuthentication(true)
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
+				.deleteCookies("JSESSIONID");
 	}
 
 	@Override
