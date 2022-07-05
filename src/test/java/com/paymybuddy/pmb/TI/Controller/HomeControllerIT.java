@@ -91,8 +91,8 @@ class HomeControllerIT {
 	void whenRegisterPost_thenReturnsNotNull() throws Exception {
 		// ARRANGE
 		MvcResult result = mockMvc
-				.perform(post("/register").param("redirectAttributes", "attribute").param("firstName", "Max")
-						.param("lastName", "Jacob").param("loginMail", "j@gmail.com")
+				.perform(post("/register").param("redirectAttributes", "attribute").param("model", "")
+						.param("firstName", "Max").param("lastName", "Jacob").param("loginMail", "j@gmail.com")
 						.param("psswrd", "$2a$10$MdYdeJHJ4.r1HJF0h2XUm.fa5.AfDhKqX.eVmhgVKPKCViAHPoYU2")
 						.contentType("application/json").with(csrf()))
 				.andExpect(status().isFound()).andExpect(view().name("redirect:/transfer")).andReturn();

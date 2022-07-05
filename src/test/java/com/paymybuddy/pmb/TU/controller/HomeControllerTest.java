@@ -137,43 +137,45 @@ class HomeControllerTest {
 	@ParameterizedTest
 	@MethodSource("RegisterTransferSource")
 	@DisplayName("Post register at transfer")
-	void whenHomeWithRegister_thenReturnsNotNull(RedirectAttributes redirectAttributes, String firstName,
+	void whenHomeWithRegister_thenReturnsNotNull(RedirectAttributes redirectAttributes, Model model, String firstName,
 			String lastName, String loginMail, String psswrd) throws Exception {
 		// ARRANGE
-		UserAccount ua1 = new UserAccount(1L, "admin@gmail.com",
+		UserAccount ua1 = new UserAccount(20L, "admin@gmail.com",
 				"$2a$10$Yut7ko9yB0pbMMg2GaTMqOp6UtMoyhYWVqdYLk9Rk7/SOkNUA.u/y", "admin", "admin", 150D);
 		when(userAccountService.registerNewUserAccount(null, loginMail, psswrd, firstName, lastName, 0D))
 				.thenReturn(ua1);
 		// ACT
-		String ret = homeController.registerUserAccount(null, loginMail, psswrd, firstName, lastName);
+		String ret = homeController.registerUserAccount(redirectAttributes, model, firstName, lastName, loginMail,
+				psswrd);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 	}
 
 	// with its data
 	private static Stream<Arguments> RegisterTransferSource() {
-		return Stream.of(Arguments.of(null, "admin", "admin", "admin@gmail.com",
+		return Stream.of(Arguments.of(null, null, "admin", "admin", "admin@gmail.com",
 				"$2a$10$Yut7ko9yB0pbMMg2GaTMqOp6UtMoyhYWVqdYLk9Rk7/SOkNUA.u/y"));
 	}
 
 	@ParameterizedTest
 	@MethodSource("RegisterIndexSource")
 	@DisplayName("Post register at index")
-	void whenHomeWithRegister_thenReturnsNull(RedirectAttributes redirectAttributes, String firstName, String lastName,
-			String loginMail, String psswrd) throws Exception {
+	void whenHomeWithRegister_thenReturnsNull(RedirectAttributes redirectAttributes, Model model, String firstName,
+			String lastName, String loginMail, String psswrd) throws Exception {
 		// ARRANGE
 //		UserAccount ua1 = null;
 //		when(userAccountService.registerNewUserAccount(null, loginMail, psswrd, firstName, lastName, 0D))
 //				.thenReturn(ua1);
 		// ACT
-		String ret = homeController.registerUserAccount(null, loginMail, psswrd, firstName, lastName);
+		String ret = homeController.registerUserAccount(redirectAttributes, model, firstName, lastName, loginMail,
+				psswrd);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 	}
 
 	// with its data
 	private static Stream<Arguments> RegisterIndexSource() {
-		return Stream.of(Arguments.of(null, "tito", "tito", "tito@gmail.com", "tito"));
+		return Stream.of(Arguments.of(null, null, "tito", "tito", "tito@gmail.com", "tito"));
 	}
 
 }

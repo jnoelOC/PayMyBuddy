@@ -25,9 +25,9 @@ class BankAccountControllerIT {
 	@WithMockUser(username = "j@gmail.com")
 	@DisplayName("Add sold")
 	void addSoldPost_thenRedirectToTransfer() throws Exception {
-		mockMvc.perform(post("/bank/addSold").param("principal", "j@gmail.com").param("sold", "15")
-				.contentType("application/json").with(csrf())).andExpect(status().isFound())
-				.andExpect(view().name("redirect:/transfer")).andReturn();
+		mockMvc.perform(post("/bank/addSold").param("redirectAttributes", "").param("principal", "j@gmail.com")
+				.param("model", "").param("sold", "15").contentType("application/json").with(csrf()))
+				.andExpect(status().isFound()).andExpect(view().name("redirect:/transfer")).andReturn();
 	}
 
 	@Test

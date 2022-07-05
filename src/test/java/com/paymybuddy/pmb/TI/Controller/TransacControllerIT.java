@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class TransacControllerIT {
+class TransacControllerIT {
 
 	@Autowired
 	private MockMvc mockMvc;

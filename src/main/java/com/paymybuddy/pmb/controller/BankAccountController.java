@@ -35,9 +35,14 @@ public class BankAccountController {
 	UserAccountService userAccountService;
 
 	@PostMapping("/bank/addSold")
-	public String addSoldPost(Principal principal,
+	public String addSoldPost(RedirectAttributes redirectAttributes, Principal principal, Model model,
 			@RequestParam(value = "sold", name = "sold", required = false) Integer sold) {
 		try {
+			if (sold == null) {
+				redirectAttributes.addFlashAttribute("message", "Please, fill a positive amount.");
+				return "redirect:/bank";
+			}
+
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
 			BankAccount bankAccount = bankAccountService.findByLoginMail(principal.getName());
 

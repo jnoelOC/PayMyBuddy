@@ -65,13 +65,18 @@ public class HomeController {
 	}
 
 	@PostMapping({ "/register" })
-	public String registerUserAccount(RedirectAttributes redirectAttributes,
+	public String registerUserAccount(RedirectAttributes redirectAttributes, Model model,
 			@RequestParam(value = "firstName", name = "firstName", required = false) String firstName,
 			@RequestParam(value = "lastName", name = "lastName", required = false) String lastName,
 			@RequestParam(value = "loginMail", name = "loginMail", required = false) String loginMail,
 			@RequestParam(value = "psswrd", name = "psswrd", required = false) String psswrd) throws Exception {
 
 		try {
+			if (loginMail.isEmpty()) {
+				redirectAttributes.addFlashAttribute("message", "Please, fill E-mail at least.");
+				return "redirect:/register";
+			}
+
 			UserAccount registration = userAccountService.registerNewUserAccount(null, loginMail, psswrd, firstName,
 					lastName, 0D);
 
