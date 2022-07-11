@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -32,15 +34,18 @@ public class UserAccount {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, unique = true)
 	private Long id;
-	@Column(name = "LOGIN_MAIL", length = 50, unique = true)
+	@Column(name = "LOGIN_MAIL", length = 50, nullable = false, unique = true)
+	@NotBlank(message = "the email cannot be empty or null")
+	@Email(message = "please entre email address")
 	private String loginMail;
 	@Column(name = "PSSWRD", length = 60)
+	@NotBlank(message = "the password cannot be empty or null")
 	private String psswrd;
 	@Column(name = "FIRSTNAME", length = 30)
 	private String firstName;
 	@Column(name = "LASTNAME", length = 30)
 	private String lastName;
-	@Column(name = "SOLDE")
+	@Column(name = "SOLDE", nullable = false)
 	private Double solde;
 
 	@ManyToMany(fetch = FetchType.LAZY)

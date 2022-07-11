@@ -55,9 +55,14 @@ public class BankAccountController {
 	}
 
 	@PostMapping("/bank/substractSold")
-	public String substractSoldPost(Principal principal,
+	public String substractSoldPost(RedirectAttributes redirectAttributes, Principal principal,
 			@RequestParam(value = "sold", name = "sold", required = false) Integer sold) {
 		try {
+			if (sold == null) {
+				redirectAttributes.addFlashAttribute("message", "Please, fill a positive amount.");
+				return "redirect:/bank";
+			}
+
 			BankAccount bankAccount = bankAccountService.findByLoginMail(principal.getName());
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
 			bankAccountService.substractSold(bankAccount, sender, sold);

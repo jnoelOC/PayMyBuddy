@@ -30,6 +30,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.controller.TransacController;
 import com.paymybuddy.pmb.model.Transac;
@@ -435,8 +436,8 @@ class TransacControllerTest {
 	@ParameterizedTest
 	@MethodSource("transferPostSource")
 	@DisplayName("Transfer post")
-	void whenTransferPost_thenReturnsNotNull(Principal principal, String userConx, String description, Double amount)
-			throws Exception {
+	void whenTransferPost_thenReturnsNotNull(RedirectAttributes redirectAttributes, Principal principal,
+			String userConx, String description, Double amount) throws Exception {
 		// ARRANGE
 		Transac t1 = new Transac(1L, "description1", 12D, "j@gmail.com", "a@gmail.com");
 
@@ -444,7 +445,7 @@ class TransacControllerTest {
 				.thenReturn(t1);
 
 		// ACT
-		String ret = transacController.transferPost(principal, userConx, description, amount);
+		String ret = transacController.transferPost(redirectAttributes, principal, userConx, description, amount);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 
@@ -460,6 +461,6 @@ class TransacControllerTest {
 			}
 		}
 		princip p = new princip();
-		return Stream.of(Arguments.of(p, "a@gmail.com", "musée", 26D));
+		return Stream.of(Arguments.of(null, p, "a@gmail.com", "musée", 26D));
 	}
 }

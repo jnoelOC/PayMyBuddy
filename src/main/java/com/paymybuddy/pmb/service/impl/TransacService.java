@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,18 @@ public class TransacService {
 	 */
 	public List<Transac> findAllTransactions() {
 		return transacRepository.findAll();
+	}
+
+	public Page<Transac> findPage(int pageNumber) {
+		Page<Transac> pt = null;
+		try {
+			Pageable pageable = PageRequest.of(pageNumber - 1, 5);
+
+			pt = transacRepository.findAll(pageable);
+		} catch (Exception e) {
+			logger.error("Erreur dans findPage : " + e.getMessage());
+		}
+		return pt;
 	}
 
 	/*

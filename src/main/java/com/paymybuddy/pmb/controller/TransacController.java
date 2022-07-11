@@ -10,13 +10,16 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.paymybuddy.pmb.model.Transac;
 import com.paymybuddy.pmb.model.UserAccount;
@@ -70,6 +73,33 @@ public class TransacController {
 		return connections;
 	}
 
+	@GetMapping("/transfer/page/{pageNumber}")
+	public String getOnePage(Model model, @PathVariable("pageNumber") int currentPage) {
+
+		try {
+			// managment of pages
+			Page<Transac> page = transacService.findPage(currentPage);
+			int totalPages = page.getTotalPages();
+			long totalItems = page.getTotalElements();
+			List<Transac> transacs2 = page.getContent();
+
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("totalPages", totalPages);
+			model.addAttribute("totalItems", totalItems);
+			model.addAttribute("transacs", transacs2);
+
+		} catch (Exception e) {
+			logger.error("Erreur dans getOnePage : " + e.getMessage());
+		}
+		return "transfer_page";
+	}
+
+//	@GetMapping("/transfer")
+//	public String getAllPages(Model model) {
+////	public String transferGet(Model model) {
+//		return getOnePage(model, 1);
+//	}
+
 	@GetMapping("/transfer")
 	public String transferGet(Model model) {
 
@@ -84,19 +114,49 @@ public class TransacController {
 			model.addAttribute("transacs", ltOfGiver);
 
 		} catch (Exception e) {
-			logger.error("Erreur dans transferGet : %s ", e.getMessage());
+			logger.error("Erreur dans GetAll : %s ", e.getMessage());
 		}
 
-		return "transfer_page";
+		return getOnePage(model, 1);
 	}
 
+//	@GetMapping("/transfer")
+//	public String transferGet(Model model) {
+//
+//		List<Transac> ltOfReceiver = new ArrayList<>();
+//		List<Transac> ltOfGiver = new ArrayList<>();
+//		try {
+//
+//			String emailUserConnected = SecurityContextHolder.getContext().getAuthentication().getName();
+//			ltOfGiver = transacService.findAllTransactionsByGiver(emailUserConnected);
+//			ltOfReceiver = transacService.findAllTransactionsByReceiver(emailUserConnected);
+//			ltOfGiver.addAll(ltOfReceiver);
+//			model.addAttribute("transacs", ltOfGiver);
+//
+//		} catch (Exception e) {
+//			logger.error("Erreur dans transferGet : " + e.getMessage());
+//		}
+//
+//		return "transfer_page";
+//	}
+
 	@PostMapping("/transfer")
-	public String transferPost(Principal principal,
+	public String transferPost(RedirectAttributes redirectAttributes, Principal principal,
 			@RequestParam(value = "userconnections", name = "userconnections", required = false) String userconnections,
 			@RequestParam(value = "description", name = "description", required = false) String description,
 			@RequestParam(value = "amount", name = "amount", required = false) Double amount) {
 
 		try {
+
+			if (description.isEmpty()) {
+				redirectAttributes.addFlashAttribute("message", "Please, fill a description.");
+				return "redirect:/transfer";
+			}
+
+			if (amount == null) {
+				redirectAttributes.addFlashAttribute("message", "Please, fill a positive amount.");
+				return "redirect:/transfer";
+			}
 
 			Transac transac = userAccountService.transferMoneyUserAccount(principal.getName(), userconnections,
 					description, amount);
@@ -154,7 +214,7 @@ public class TransacController {
 		try {
 			// recuperer le sender
 			UserAccount sender = userAccountService.findByLoginMail(principal.getName());
-			// Ajouter une connexion à la liste des connexions du sender
+			// supprimer une connexion à la liste des connexions du sender
 			userAccountService.deleteConxUserAccount(sender, connectionMail);
 		} catch (Exception ex) {
 			logger.error("Error dans deleteConnectionGet : " + ex.getMessage());

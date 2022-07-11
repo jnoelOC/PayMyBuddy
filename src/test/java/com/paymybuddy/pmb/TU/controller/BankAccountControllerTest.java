@@ -303,10 +303,11 @@ class BankAccountControllerTest {
 	@ParameterizedTest
 	@MethodSource("SubstractSoldSource")
 	@DisplayName("Substract sold")
-	void whenSubstractSold_thenReturnsNotNull(Principal principal, Integer sold) {
+	void whenSubstractSold_thenReturnsNotNull(RedirectAttributes redirectAttributes, Principal principal,
+			Integer sold) {
 		// ARRANGE
 		// ACT
-		String ret = bankAccountController.substractSoldPost(principal, sold);
+		String ret = bankAccountController.substractSoldPost(redirectAttributes, principal, sold);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 	}
@@ -321,16 +322,16 @@ class BankAccountControllerTest {
 		}
 		princip p = new princip();
 
-		return Stream.of(Arguments.of(p, 0), Arguments.of(p, 10), Arguments.of(p, Integer.MAX_VALUE));
+		return Stream.of(Arguments.of(null, p, 0), Arguments.of(null, p, 10), Arguments.of(null, p, Integer.MAX_VALUE));
 	}
 
 	@ParameterizedTest
 	@MethodSource("SubstractSoldNullSource")
 	@DisplayName("Substract sold null")
-	void whenSubstractSold_thenReturnsNull(Principal principal, Integer sold) {
+	void whenSubstractSold_thenReturnsNull(RedirectAttributes redirectAttributes, Principal principal, Integer sold) {
 		// ARRANGE
 		// ACT
-		String ret = bankAccountController.substractSoldPost(principal, sold);
+		String ret = bankAccountController.substractSoldPost(redirectAttributes, principal, sold);
 		// ASSERT
 		assertThat(ret).hasToString("redirect:/transfer");
 	}
@@ -345,7 +346,7 @@ class BankAccountControllerTest {
 		}
 		princip p = new princip();
 
-		return Stream.of(Arguments.of(p, -1), Arguments.of(p, Integer.MIN_VALUE),
-				Arguments.of(null, Integer.MIN_VALUE));
+		return Stream.of(Arguments.of(null, p, -1), Arguments.of(null, p, Integer.MIN_VALUE),
+				Arguments.of(null, null, Integer.MIN_VALUE));
 	}
 }

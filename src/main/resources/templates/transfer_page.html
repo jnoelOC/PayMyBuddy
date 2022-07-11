@@ -16,6 +16,7 @@
 <div th:replace="/nav_fragment :: #my_template_nav"></div>
 
 </br>
+<h2 style=text-align:center th:text="${message}"></h2>
 <h3 style="text-align:center">Send money
 <a th:href="@{/transac/addConnection}"><button class="button buttonBlue">Manage friends</button></a>
 </h3>
@@ -39,7 +40,7 @@
 <div th:if="${not #lists.isEmpty(transacs)}">
 <div class="table-responsive-md">
 <table class="table table-success table-striped">
-	<caption>List of transactions</caption>
+<!--	<caption>List of transactions</caption> -->
   	 <thead>
     <tr>
       <th scope="col">Friend</th>
@@ -57,5 +58,16 @@
 </table>
 </div></div>
 </form>
+
+<footer style="font-size: medium" class="panel-footer">
+    Total Items [[${totalItems}]] : Page [[${currentPage}]] of [[${totalPages}]]
+    &nbsp; &nbsp; &nbsp;
+    <ul class="pagination justify-content-center">
+    <li class="page-item" th:each="i: ${#numbers.sequence(1, totalPages)}">
+    	<a th:href="@{'/transfer/page/' + ${i}}">[[${i}]]</a>
+        &nbsp; &nbsp;
+    </li>
+    </ul>
+</footer>  
 </body>
 </html>
