@@ -1,6 +1,7 @@
 package com.paymybuddy.pmb.controller;
 
 import java.security.Principal;
+import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +25,9 @@ import com.paymybuddy.pmb.service.impl.UserAccountService;
  */
 @Controller
 public class HomeController {
+
+//	private static final String regex = "^[a-zA-Z0-9]+@[a-zA-Z0-9.-]+$";
+	private static final String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 
 	public static final Logger logger = LogManager.getLogger(HomeController.class);
 
@@ -77,6 +81,11 @@ public class HomeController {
 				return "redirect:/register";
 			}
 
+//			if (patternMatches(loginMail, regex)) {
+//				redirectAttributes.addFlashAttribute("message", "Wrong loginMail syntax.");
+//				return "redirect:/register";
+//			}
+
 			UserAccount registration = userAccountService.registerNewUserAccount(null, loginMail, psswrd, firstName,
 					lastName, 0D);
 
@@ -87,5 +96,9 @@ public class HomeController {
 			System.out.println("Duplicated user : " + ex.getMessage());
 		}
 		return "redirect:/transfer";
+	}
+
+	public static boolean patternMatches(String emailAddress, String regexPattern) {
+		return Pattern.compile(regexPattern).matcher(emailAddress).matches();
 	}
 }

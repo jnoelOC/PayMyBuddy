@@ -36,7 +36,7 @@ public class UserAccount {
 	private Long id;
 	@Column(name = "LOGIN_MAIL", length = 50, nullable = false, unique = true)
 	@NotBlank(message = "the email cannot be empty or null")
-	@Email(message = "please entre email address")
+	@Email(message = "please enter email address")
 	private String loginMail;
 	@Column(name = "PSSWRD", length = 60)
 	@NotBlank(message = "the password cannot be empty or null")

@@ -163,9 +163,6 @@ class HomeControllerTest {
 	void whenHomeWithRegister_thenReturnsNull(RedirectAttributes redirectAttributes, Model model, String firstName,
 			String lastName, String loginMail, String psswrd) throws Exception {
 		// ARRANGE
-//		UserAccount ua1 = null;
-//		when(userAccountService.registerNewUserAccount(null, loginMail, psswrd, firstName, lastName, 0D))
-//				.thenReturn(ua1);
 		// ACT
 		String ret = homeController.registerUserAccount(redirectAttributes, model, firstName, lastName, loginMail,
 				psswrd);
@@ -177,7 +174,6 @@ class HomeControllerTest {
 	private static Stream<Arguments> RegisterIndexSource() {
 		return Stream.of(Arguments.of(null, null, "tito", "tito", "tito@gmail.com", "tito"));
 	}
-
 }
 
 class modl implements Model {

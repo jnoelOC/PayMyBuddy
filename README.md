@@ -31,3 +31,15 @@ spring.jpa.defer-datasource-initialization=false
 
 It will create a database with tables and populate it with data, from schema.sql and data.sql in resources folder.
 
+
+Modèle Physique de Données
+![mpd](https://github.com/jnoelOC/PayMyBuddy/blob/develop/images/Chambe_Jean-Noel_5_mpd_012022.png)
+
+Diagramme UML
+![UML diagram](https://github.com/jnoelOC/PayMyBuddy/blob/develop/images/Chambe_Jean-Noel_6_diagrammeUML_012022.png)
+
+Script schema.sql
+![schema.sql](https://github.com/jnoelOC/PayMyBuddy/tree/develop/src/main/resources/schema.sql)
+
+Script data.sql
+![data.sql](https://github.com/jnoelOC/PayMyBuddy/tree/develop/src/main/resources/data.sql)
